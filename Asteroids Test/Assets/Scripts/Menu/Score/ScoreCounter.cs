@@ -24,23 +24,17 @@ namespace DefaultNamespace.Score
 
         private void OnEnable()
         {
-            _enemySpawner.Spawned += OnSpawned;
+            
         }
 
         private void OnDisable()
         {
-            _enemySpawner.Spawned += OnSpawned;
+            
         }
 
         private void OnSpawned(Enemy enemy)
         {
-            enemy.Destroyed += OnDestroyed;
             enemy.DestroyedByPlayer += OnDestroyedByPlayer;
-        }
-
-        private void OnDestroyed(Enemy enemy)
-        {
-            enemy.Destroyed -= OnDestroyed;
         }
 
         private void OnDestroyedByPlayer(int points)

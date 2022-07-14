@@ -1,34 +1,20 @@
 ﻿using System;
 using Enemies;
+using Factories;
 using UnityEngine;
 
 namespace Spawner
 {
-    public class EnemySpawner : MonoBehaviour
+    public abstract class EnemySpawner : MonoBehaviour
     {
-        public event Action<Enemy> Spawned;
+        public void Add(Enemy enemy)
+		{
+           
+		}
 
-        [SerializeField] private AsteroidSpawner _asteroidSpawner;
-        [SerializeField] private UfoSpawner _ufoSpawner;
-        
-        public void Register(Enemy enemy)
-        {
-            enemy.Destroyed += UnRegister;
-            Spawned?.Invoke(enemy);
-        }
+        public abstract void Init(Transform transform);
 
-        public void UnRegister(Enemy enemy)
-        {
-            enemy.Destroyed -= UnRegister;
-            
-            if (enemy is Asteroid asteroid)
-            {
-                _asteroidSpawner.Remove(asteroid);
-            }
-            else if(enemy is Ufo ufo)
-            {
-                _ufoSpawner.Remove(ufo);
-            }
-        }
-    }
+        public abstract void Dispose();
+
+	}
 }

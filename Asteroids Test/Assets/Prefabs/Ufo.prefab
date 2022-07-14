@@ -155,8 +155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shotPoint: {fileID: 4561320161702161076}
-  _bulletColor: {r: 1, g: 0, b: 0, a: 1}
-  _layerMaskName: UfoBullet
+  _bulletType: 1
+  _bulletCollor: {r: 0.9433962, g: 0, b: 0, a: 1}
   _minimumRechargeTime: 2
   _maximumRechargeTime: 5
 --- !u!50 &8178327255989424428

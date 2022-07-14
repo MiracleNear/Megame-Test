@@ -10,8 +10,6 @@ namespace Enemies
     public abstract class Enemy : MonoBehaviour, IBulletCollisionHandler
     {
         public event Action<int> DestroyedByPlayer;
-
-        public event Action<Enemy> Destroyed; 
         public int Points { get; private set; }
         
         public Vector3 Direction { get; private set; }
@@ -28,21 +26,29 @@ namespace Enemies
             Points = enemyConfig.Points;
         }
 
-        public virtual void OnCollisionBullet()
-        {
+        public abstract void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful);
+
+        protected bool IsDestroyByPlayer(Bullet bullet)
+		{
+            if(BulletType.Player == bullet.Type)
+			{
+                DestroyByPlayer();
+
+                return true;
+			}
+
+            return false; 
+		}            
+
+        private void DestroyByPlayer()
+		{
             DestroyedByPlayer?.Invoke(Points);
-            DestroySelf();
-            
-        }
+		}
 
         protected void Move()
         {
             transform.position = transform.position + Direction * (_speed * Time.deltaTime);
         }
 
-        protected void DestroySelf()
-        {
-            Destroyed?.Invoke(this);
-        }
     }
 }

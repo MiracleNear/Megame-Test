@@ -4,10 +4,11 @@ using Factories;
 using Handlers;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(GameZoneOutBoundsHandler))]
+[RequireComponent(typeof(GameZoneOutBoundsHandler), typeof(SpriteRenderer))]
 public class Bullet : MonoBehaviour
 {
     public BulletFactory OriginFactory { get; set; }
+    public BulletType Type { get; private set; }
     
     [SerializeField] private float _unitPerSecond;
     
@@ -15,23 +16,23 @@ public class Bullet : MonoBehaviour
     private float _maxDistance;
     private float _distanceTraveled;
     private SpriteRenderer _spriteRenderer;
-    
-    private void Awake()
-    {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
-    private void Start()
+	private void Awake()
+	{
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+	}
+
+	private void Start()
     {
         _maxDistance = ScreenBoundSize.Size.x;
     }
 
-    public void Init(Vector2 position, Vector3 direction, Color color, string layerMaskName)
+    public void Init(Vector2 position, Vector3 direction, Color color, BulletType bulletType)
     {
-        _spriteRenderer.color = color;
         _direction = direction;
         transform.position = position;
-        gameObject.layer = LayerMask.NameToLayer(layerMaskName);
+        _spriteRenderer.color = color;
+        Type = bulletType;
     }
 
     private void Update()
@@ -57,9 +58,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.TryGetComponent(out IBulletCollisionHandler handler))
         {
-            handler.OnCollisionBullet();
-            
-            Dispose();
+            handler.OnCollisionBullet(this, Dispose);
         }
     }
 

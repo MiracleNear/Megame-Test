@@ -7,22 +7,21 @@ using Random = UnityEngine.Random;
 
 namespace Spawner
 {
-    public class UfoSpawner : MonoBehaviour
+    public class UfoSpawner : EnemySpawner
     {
         [SerializeField] private UfoFactory _ufoFactory;
-        [SerializeField] private EnemySpawner _enemySpawner;
-        [SerializeField] private PlayerSpawner _playerSpawner;
         [SerializeField] private int _minAppearanceDelayTime, _maxAppearanceDelayTime;
         [SerializeField] private Collider2D _ufoCollider;
         
         private float _offsetFromTheHorizontalBorderInPercent = 20f;
         private UfoSpawnPoint[] _ufoSpawnPoints;
+        private Transform _target;
+        private Coroutine _spawnWithDelay;
         private Ufo _activeUfo;
-        private Coroutine _spawnUfo;
-        private Player _target;
 
         private void Awake()
         {
+
             float offset = (ScreenBoundSize.HalfSize.y / 100f) * _offsetFromTheHorizontalBorderInPercent;
 
             float maxVerticalPositionSpawn = ScreenBoundSize.HalfSize.y - offset;
@@ -38,42 +37,27 @@ namespace Spawner
             };
         }
         
+        public override void Init(Transform target)
+		{
+            _target = target;
 
-        private void OnEnable()
+            _spawnWithDelay = StartCoroutine(SpawnWithDelay(GetAppearanceDelayTimeUfo()));
+		}
+
+        public override void Dispose()
         {
-            _playerSpawner.Spawned += OnSpawned;
+            StopCoroutine(_spawnWithDelay);
+
+            Remove();
         }
 
-        private void OnDisable()
-        {
-            _playerSpawner.Spawned -= OnSpawned;
-        }
 
-        private void OnSpawned(Player player)
+        private void Remove()
         {
-            player.Died += OnDied;
-            _target = player;
-            _spawnUfo = StartCoroutine(SpawnWithDelay(GetAppearanceDelayTimeUfo()));
-        }
-
-        private void OnDied(Player player)
-        {
-            if (_activeUfo != null)
+            if(_activeUfo != null)
             {
-                _enemySpawner.UnRegister(_activeUfo);
+                _ufoFactory.Reclaim(_activeUfo);
             }
-
-            if (_spawnUfo != null)
-            {
-                StopCoroutine(_spawnUfo);
-
-                _spawnUfo = null;
-            }
-        }
-
-        public void Remove(Ufo ufo)
-        {
-            _ufoFactory.Reclaim(ufo);
         }
 
         private IEnumerator SpawnWithDelay(int delay)
@@ -82,9 +66,9 @@ namespace Spawner
 
             UfoSpawnPoint randomSpawnPoint = GetRandomSpawnPoint();
             
-            _activeUfo = _ufoFactory.Create(randomSpawnPoint.GetPosition(), randomSpawnPoint.GetDirection(), _target.transform);
-            
-            _enemySpawner.Register(_activeUfo);
+            _activeUfo = _ufoFactory.Create(randomSpawnPoint.GetPosition(), randomSpawnPoint.GetDirection(), _target);
+
+            _activeUfo.Died += Remove;
         }
 
         private int GetAppearanceDelayTimeUfo()
@@ -98,9 +82,8 @@ namespace Spawner
 
             return _ufoSpawnPoints[randomIndexSpawnPoint];
         }
-        
 
-        private class UfoSpawnPoint
+		private class UfoSpawnPoint
         {
             private float _horizontalPosition, _minVerticalPositionSpawn, _maxVerticalPositionSpawn;
             private Vector2 _direction;

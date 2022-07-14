@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using DefaultNamespace.Menu;
+using Factories;
 using Handlers;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ using UnityEngine;
 [RequireComponent(typeof(GameZoneOutBoundsHandler))]
 public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollisionHandler
 {
-    public event Action<Player> Died;
+    public event Action Died;
     
     [SerializeField] private float _rotatePerSecond;
     [SerializeField] private float _speedPerSecond;
@@ -19,7 +20,6 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
     private PlayerWeapon _playerWeapon;
     private Invulnerability _invulnerability;
     private KeyboardInput _keyboardInput;
-    private PlayerLife _playerLife;
 
     private void Awake()
     {
@@ -32,11 +32,6 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
         _invulnerability.Activate();
     }
 
-    public void Init(PlayerLife playerLife)
-    {
-        _playerLife = playerLife;
-    }
-    
     private void Update()
     {
         if (_keyboardInput.IsAccelerateButtonPressed)
@@ -58,9 +53,14 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
         Destroy();
     }
 
-    public void OnCollisionBullet()
+    public void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
     {
-        Destroy();
+        if(bullet.Type == BulletType.Ufo)
+        {
+            onCollisionSuccessful?.Invoke();
+
+            Destroy();
+        }
     }
     
     
@@ -91,10 +91,8 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
     private void Destroy()
     {
         if(_invulnerability.IsActivated) return;
-        
-        _playerLife.DecreaseByOne();
-        
-        Died?.Invoke(this);
+
+        Died?.Invoke();
         
         Destroy(gameObject);
     }

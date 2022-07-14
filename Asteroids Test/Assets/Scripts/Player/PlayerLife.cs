@@ -6,7 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerLifeView))]
 public class PlayerLife : MonoBehaviour
 {
-    public event Action<int> Decreased;
+    public int Amount => _amount;
     
     private PlayerLifeView _playerLifeView;
     private int _amount = 3;
@@ -26,8 +26,6 @@ public class PlayerLife : MonoBehaviour
         _amount -= 1;
 
         _playerLifeView.Display(_amount);
-        
-        Decreased?.Invoke(_amount);
     }
     
 }

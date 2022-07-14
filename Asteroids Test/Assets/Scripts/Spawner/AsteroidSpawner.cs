@@ -8,11 +8,11 @@ using Random = UnityEngine.Random;
 
 namespace Spawner
 {
-    public class AsteroidSpawner : MonoBehaviour
+    public class AsteroidSpawner : EnemySpawner
     {
         [SerializeField] private AsteroidFactory _asteroidFactory;
-        [SerializeField] private EnemySpawner _enemySpawner;
-        
+
+        private Transform _spawnCenter;
         private int _numberOfAsteroids = 2;
         private float _offsetFromScreenBorder = 1f;
         private List<Asteroid> _activeAsteroids;
@@ -23,30 +23,40 @@ namespace Spawner
             _activeAsteroids = new List<Asteroid>();
         }
 
-        private void Start()
+        public override void Init(Transform spawnCenter)
+		{
+            _spawnCenter = spawnCenter;
+
+            if(_activeAsteroids.Count == 0)
+			{
+                SpawnAsteroids();
+			}
+		}
+
+        public override void Dispose()
         {
-            SpawnAsteroids(_numberOfAsteroids);
+            _spawnCenter = null;
         }
 
-        public void Remove(Asteroid asteroid)
+        private void Remove(Asteroid asteroid)
         {
             _activeAsteroids.Remove(asteroid);
-            
-            _asteroidFactory.Reclaim(asteroid);
-
-            asteroid.BulletHit -= OnBulletHit;
             
             if (_activeAsteroids.Count == 0)
             {
                 _numberOfAsteroids += 1;
                 
-                SpawnAsteroids(_numberOfAsteroids);
+                SpawnAsteroids();
             }
+
+            _asteroidFactory.Reclaim(asteroid);
         }
         
-        private void SpawnAsteroids(int count)
+        private void SpawnAsteroids()
         {
-            for (int i = 0; i < count; i++)
+            if(_spawnCenter == null) return;
+
+            for (int i = 0; i < _numberOfAsteroids; i++)
             {
                 Vector2 randomDirection = GerRandomDirectionForAsteroid();
                 Vector2 randomPosition = GetRandomPointWithinThePlayArea();
@@ -97,9 +107,14 @@ namespace Spawner
         private void SpawnAsteroid(AsteroidType type, Vector2 position, Vector2 direction)
         {
             Asteroid asteroid = _asteroidFactory.CreateAsteroid(type, position, direction);
+
             asteroid.BulletHit += OnBulletHit;
+
+            asteroid.Died += Remove;
+
             _activeAsteroids.Add(asteroid);
-            _enemySpawner.Register(asteroid);
+
+            Add(asteroid);
         }
-    }
+	}
 }

@@ -101,9 +101,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8309a74a344b5299f06ef22c1fdb0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lives: 3
-  _spawnDelayAfterDeath: 3
-  _keyboardInput: {fileID: 0}
   _rotatePerSecond: 180
   _speedPerSecond: 3
   _maxSpeed: 3
@@ -132,8 +129,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shotPoint: {fileID: 1469495958820813704}
-  _bulletColor: {r: 0.38375115, g: 1, b: 0, a: 1}
-  _layerMaskName: PlayerBullet
+  _bulletType: 0
+  _bulletCollor: {r: 0, g: 1, b: 0, a: 1}
   _numberOfBulletsPerSecond: 3
 --- !u!114 &1469495958565677294
 MonoBehaviour:

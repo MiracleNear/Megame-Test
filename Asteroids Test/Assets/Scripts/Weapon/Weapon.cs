@@ -4,8 +4,8 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] private Transform _shotPoint;
-    [SerializeField] private Color _bulletColor;
-    [SerializeField] private string _layerMaskName;
+    [SerializeField] private BulletType _bulletType;
+    [SerializeField] private Color _bulletCollor;
     
     private BulletFactory _bulletFactory;
     private float _timePreviousShot;
@@ -41,6 +41,6 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Shoot(Vector2 direction)
     {
-        _bulletFactory.Create(_shotPoint.position, direction, _layerMaskName, _bulletColor);
+        _bulletFactory.Create(_shotPoint.position, direction, _bulletCollor, _bulletType);
     }
 }
