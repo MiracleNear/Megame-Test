@@ -36,7 +36,11 @@ namespace Factories
             
             return Create(asteroid, enemyConfig, position, direction);
         }
-        
+
+        public override void Reclaim(Asteroid enemy)
+        {
+            _asteroidsPool.ReturnToPool(enemy);
+        }
         
         private EnemyConfig GetAsteroidConfigByType(AsteroidType asteroidType)
         {
@@ -51,12 +55,6 @@ namespace Factories
                 default:
                     throw new Exception("no such config");
             }
-        }
-
-
-        public override void Reclaim(Asteroid enemy)
-        {
-            _asteroidsPool.ReturnToPool(enemy);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using DefaultNamespace.Audio;
 using Factories;
 using Handlers;
 using UnityEngine;
@@ -11,15 +12,18 @@ namespace Enemies
     {
         public event Action<int> DestroyedByPlayer;
         public int Points { get; private set; }
-        
         public Vector3 Direction { get; private set; }
+
+        [SerializeField] private ExplosionSFX _explosionSfx;
         
         private float _speed;
-
+        private AudioClip _deathSound;
+        
         public void Init(EnemyConfig enemyConfig, Vector2 position, Vector2 direction)
         { 
             Direction = direction;
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
+            _deathSound = enemyConfig.DeathSound;
             
             transform.position = position;
             transform.localScale = enemyConfig.Scale;
@@ -33,16 +37,10 @@ namespace Enemies
             if(BulletType.Player == bullet.Type)
 			{
                 DestroyByPlayer();
-
                 return true;
 			}
 
             return false; 
-		}            
-
-        private void DestroyByPlayer()
-		{
-            DestroyedByPlayer?.Invoke(Points);
 		}
 
         protected void Move()
@@ -50,5 +48,15 @@ namespace Enemies
             transform.position = transform.position + Direction * (_speed * Time.deltaTime);
         }
 
+        protected void PlaySoundDeath()
+        {
+            Instantiate(_explosionSfx).Init(_deathSound);
+        }
+        
+
+        private void DestroyByPlayer()
+		{
+            DestroyedByPlayer?.Invoke(Points);
+		}
     }
 }

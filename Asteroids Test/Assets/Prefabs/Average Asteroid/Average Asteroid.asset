@@ -16,3 +16,4 @@ MonoBehaviour:
   Scale: {x: 0.75, y: 0.75}
   MinSpeed: 3
   MaxSpeed: 4
+  DeathSound: {fileID: 8300000, guid: 8ee5e9d6d77b7d849a0ab65264348172, type: 3}

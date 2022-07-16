@@ -7,14 +7,20 @@ namespace Spawner
 {
     public abstract class EnemySpawner : MonoBehaviour
     {
-        public void Add(Enemy enemy)
+	    [SerializeField] private EnemyPublisher _enemyPublisher;
+
+	    public abstract void Init(Transform transform);
+
+	    public abstract void Dispose();
+
+	    protected void Add(Enemy enemy)
 		{
-           
+           _enemyPublisher.Publish(enemy);
 		}
 
-        public abstract void Init(Transform transform);
-
-        public abstract void Dispose();
-
-	}
+	    protected  void Revoke(Enemy enemy)
+        {
+	        _enemyPublisher.Remove(enemy);
+        }
+    }
 }

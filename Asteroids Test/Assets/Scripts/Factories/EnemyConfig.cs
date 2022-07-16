@@ -8,5 +8,6 @@ namespace Factories
         public int Points;
         public Vector2 Scale;
         public float MinSpeed, MaxSpeed;
+        public AudioClip DeathSound;
     }
 }

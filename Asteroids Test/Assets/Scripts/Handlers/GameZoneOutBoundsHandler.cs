@@ -1,4 +1,5 @@
-﻿using Detectors;
+﻿using System;
+using Detectors;
 using UnityEngine;
 
 namespace Handlers
@@ -16,9 +17,12 @@ namespace Handlers
         
         private void Awake()
         {
-            _previousLocationStatus = ObjectLocationStatus.OutBounds;
-
             _gameZoneOutBoundsDetector = new GameZoneOutBoundsDetector(GetComponent<Collider2D>());
+        }
+
+        private void OnEnable()
+        {
+            _previousLocationStatus = ObjectLocationStatus.OutBounds;
         }
 
         private void Update()

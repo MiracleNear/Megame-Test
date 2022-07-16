@@ -10,7 +10,6 @@ namespace Spawner
         [SerializeField] private Player _player;
         [SerializeField] private Vector2 _position;
         [SerializeField] private int _spawnDelayAfterDeath;
-        [SerializeField] private KeyboardInput _keyboardInput;
 
         private Action<Player> _spawned;
        
@@ -22,9 +21,7 @@ namespace Spawner
         private void SpawnPlayer()
         {
             Player player = Instantiate(_player, _position, quaternion.identity);
-
-            player.BindInput(_keyboardInput);
-
+            
             _spawned?.Invoke(player);
         }
 

@@ -11,11 +11,11 @@ namespace Spawner
     public class AsteroidSpawner : EnemySpawner
     {
         [SerializeField] private AsteroidFactory _asteroidFactory;
-
-        private Transform _spawnCenter;
+        
         private int _numberOfAsteroids = 2;
         private float _offsetFromScreenBorder = 1f;
         private List<Asteroid> _activeAsteroids;
+        private Vector2 _sizeScreen => ScreenBoundSize.Size;
         private Vector2 _halfSizeScreen => ScreenBoundSize.HalfSize;
 
         private void Awake()
@@ -25,8 +25,6 @@ namespace Spawner
 
         public override void Init(Transform spawnCenter)
 		{
-            _spawnCenter = spawnCenter;
-
             if(_activeAsteroids.Count == 0)
 			{
                 SpawnAsteroids();
@@ -35,7 +33,7 @@ namespace Spawner
 
         public override void Dispose()
         {
-            _spawnCenter = null;
+            
         }
 
         private void Remove(Asteroid asteroid)
@@ -48,34 +46,44 @@ namespace Spawner
                 
                 SpawnAsteroids();
             }
-
+            
+            asteroid.BulletHit -= OnBulletHit;
+            Revoke(asteroid);
             _asteroidFactory.Reclaim(asteroid);
         }
         
         private void SpawnAsteroids()
         {
-            if(_spawnCenter == null) return;
-
             for (int i = 0; i < _numberOfAsteroids; i++)
             {
-                Vector2 randomDirection = GerRandomDirectionForAsteroid();
-                Vector2 randomPosition = GetRandomPointWithinThePlayArea();
+                Vector2 position = GetRandomSpawnPosition();
+
+                Vector2 direction = GerRandomDirection(position);
                 
-                SpawnAsteroid(AsteroidType.Large, randomPosition, randomDirection);
+                SpawnAsteroid(AsteroidType.Large, position, direction);
             }
         }
         
-        private Vector2 GetRandomPointWithinThePlayArea()
+        private Vector2 GetRandomSpawnPosition()
         {
-            float randomPositionX = Random.Range(-_halfSizeScreen.x + _offsetFromScreenBorder, _halfSizeScreen.x - _offsetFromScreenBorder);
-            float randomPositionY = Random.Range(-_halfSizeScreen.y + _offsetFromScreenBorder, _halfSizeScreen.y - _offsetFromScreenBorder);
+            float distanceFromSpawnCenter =
+                Mathf.Sqrt(_sizeScreen.x * _sizeScreen.x + _sizeScreen.y * _sizeScreen.y) / 2f;
 
-            return new Vector2(randomPositionX, randomPositionY);
+            Vector2 spawnPosition = Random.insideUnitCircle.normalized * distanceFromSpawnCenter;
+            
+            return spawnPosition;
         }
         
-        private Vector2 GerRandomDirectionForAsteroid()
+        private Vector2 GerRandomDirection(Vector2 spawnPosition)
         {
-            return Random.rotation * Vector2.up;
+            float horizontalPosition = Random.Range(-_halfSizeScreen.x + _offsetFromScreenBorder, _halfSizeScreen.x -_offsetFromScreenBorder);
+            float verticalPosition = Random.Range(-_halfSizeScreen.y + _offsetFromScreenBorder , _halfSizeScreen.y - _offsetFromScreenBorder);
+            
+            Vector2 positionWithinPlayingArea = new Vector2(horizontalPosition, verticalPosition);
+            
+            Debug.DrawLine(spawnPosition, positionWithinPlayingArea, Color.magenta, 5f);
+        
+            return (positionWithinPlayingArea - spawnPosition).normalized;
         }
 
         private void OnBulletHit(Asteroid asteroid)
@@ -116,5 +124,7 @@ namespace Spawner
 
             Add(asteroid);
         }
-	}
+
+        
+    }
 }

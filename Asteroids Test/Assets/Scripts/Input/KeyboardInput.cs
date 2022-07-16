@@ -1,10 +1,29 @@
 using UnityEngine;
 
-public class KeyboardInput : MonoBehaviour
+public class KeyboardInput : IInput
 {
-    public bool IsAccelerateButtonPressed => Input.GetAxisRaw("Vertical") > 0;
+    public string Name { get; private set; } = "Keyboard Input";
 
-    public bool IsShotButtonPressed => Input.GetKeyDown(KeyCode.Space);
-    public float InverseDirectionRotation => -Input.GetAxisRaw("Horizontal");
-    
+    public void Update(Player player)
+    {
+        if (Input.GetKey(KeyCode.W))
+        {
+            player.Accelerate();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            player.Shoot();
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            player.RotateAt(1);
+        }
+        else if (Input.GetKey(KeyCode.D))
+        {
+            player.RotateAt(-1);
+        }
+        
+    }
 }

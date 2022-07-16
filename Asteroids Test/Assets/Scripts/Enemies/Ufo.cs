@@ -27,15 +27,15 @@ namespace Enemies
             Died?.Invoke();
         }
 
-		public override void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
-		{
+        public override void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
+        {
             if(IsDestroyByPlayer(bullet))
-			{
+            {
                 Died?.Invoke();
-
+                PlaySoundDeath();
                 onCollisionSuccessful?.Invoke();
-			}
-		}
+            }
+        }
 
 	
         private void Update()

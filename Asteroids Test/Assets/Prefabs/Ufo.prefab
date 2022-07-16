@@ -130,6 +130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d97022ab0ee4ad68032e00b9df2094c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _explosionSfx: {fileID: 6292913483208083912, guid: 5e0d315e4be480b48ae6600bb4fef87e, type: 3}
 --- !u!114 &5970206663596759625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +158,7 @@ MonoBehaviour:
   _shotPoint: {fileID: 4561320161702161076}
   _bulletType: 1
   _bulletCollor: {r: 0.9433962, g: 0, b: 0, a: 1}
+  _shotSound: {fileID: 8300000, guid: 712b927c870993145871764925c0158d, type: 3}
   _minimumRechargeTime: 2
   _maximumRechargeTime: 5
 --- !u!50 &8178327255989424428

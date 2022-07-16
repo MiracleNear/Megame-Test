@@ -1,24 +1,21 @@
-﻿using System;
-using DefaultNamespace.Menu;
-using UnityEngine;
-
+﻿using UnityEngine;
 
 [RequireComponent(typeof(PlayerLifeView))]
 public class PlayerLife : MonoBehaviour
 {
     public int Amount => _amount;
+
+    [SerializeField] private GameStarter _gameStarter;
     
     private PlayerLifeView _playerLifeView;
     private int _amount = 3;
         
     private void Awake()
-    { 
-        _playerLifeView = GetComponent<PlayerLifeView>();
-    }
-
-    private void Start()
     {
-        _playerLifeView.Display(_amount);
+        _playerLifeView = GetComponent<PlayerLifeView>();
+        _gameStarter.GameLaunched += OnGameLaunched;
+        
+        gameObject.SetActive(false);
     }
     
     public void DecreaseByOne()
@@ -27,5 +24,11 @@ public class PlayerLife : MonoBehaviour
 
         _playerLifeView.Display(_amount);
     }
-    
+
+    private void OnGameLaunched()
+    {
+        gameObject.SetActive(true);
+        
+        _playerLifeView.Display(_amount);
+    }
 }

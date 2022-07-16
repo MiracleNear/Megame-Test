@@ -62,7 +62,6 @@ public class Bullet : MonoBehaviour
         }
     }
 
-
     private void Dispose()
     {
         _distanceTraveled = 0f;

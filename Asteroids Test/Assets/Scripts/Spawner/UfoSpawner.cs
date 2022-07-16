@@ -57,6 +57,7 @@ namespace Spawner
             if(_activeUfo != null)
             {
                 _ufoFactory.Reclaim(_activeUfo);
+                Revoke(_activeUfo);
             }
         }
 
@@ -69,6 +70,8 @@ namespace Spawner
             _activeUfo = _ufoFactory.Create(randomSpawnPoint.GetPosition(), randomSpawnPoint.GetDirection(), _target);
 
             _activeUfo.Died += Remove;
+            
+            Add(_activeUfo);
         }
 
         private int GetAppearanceDelayTimeUfo()
@@ -83,7 +86,7 @@ namespace Spawner
             return _ufoSpawnPoints[randomIndexSpawnPoint];
         }
 
-		private class UfoSpawnPoint
+        private class UfoSpawnPoint
         {
             private float _horizontalPosition, _minVerticalPositionSpawn, _maxVerticalPositionSpawn;
             private Vector2 _direction;
