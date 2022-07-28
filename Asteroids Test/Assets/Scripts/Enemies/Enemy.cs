@@ -1,13 +1,13 @@
 ﻿using System;
 using DefaultNamespace.Audio;
+using Detectors;
 using Factories;
-using Handlers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Enemies
 {
-    [RequireComponent(typeof(GameZoneOutBoundsHandler))]
+    [RequireComponent(typeof(GameZoneOutBoundsDetector))]
     public abstract class Enemy : MonoBehaviour, IBulletCollisionHandler
     {
         public event Action<int> DestroyedByPlayer;

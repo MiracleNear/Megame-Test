@@ -10,6 +10,10 @@ public class KeyboardInput : IInput
         {
             player.Accelerate();
         }
+        else
+        {
+            player.SlowDown();
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

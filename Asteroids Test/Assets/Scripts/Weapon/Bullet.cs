@@ -1,10 +1,8 @@
-﻿using System;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using Factories;
-using Handlers;
 using UnityEngine;
 
-[RequireComponent(typeof(GameZoneOutBoundsHandler), typeof(SpriteRenderer))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Bullet : MonoBehaviour
 {
     public BulletFactory OriginFactory { get; set; }

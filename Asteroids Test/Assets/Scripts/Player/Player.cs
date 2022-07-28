@@ -2,12 +2,10 @@
 using DefaultNamespace.Audio;
 using DefaultNamespace.GameSession;
 using Factories;
-using Handlers;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerWeapon))]
 [RequireComponent(typeof(Invulnerability))]
-[RequireComponent(typeof(GameZoneOutBoundsHandler))]
 [RequireComponent(typeof(AudioSource))]
 public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollisionHandler
 {
@@ -20,7 +18,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
     [SerializeField] private float _maxSpeed;
     [SerializeField] private AudioSource _acclerationSoundSource;
     
-    private Vector3 _acceleration;
+    public Vector3 _acceleration;
     private PlayerWeapon _playerWeapon;
     private Invulnerability _invulnerability;
 
@@ -61,6 +59,11 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
         {
             _acclerationSoundSource.Play();
         }
+    }
+
+    public void SlowDown()
+    {
+        _acceleration = _acceleration - _acceleration.normalized * _speedPerSecond * (Time.deltaTime / 15f);
     }
 
     public void Shoot()

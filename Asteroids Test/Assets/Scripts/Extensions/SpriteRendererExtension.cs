@@ -12,11 +12,9 @@ namespace DefaultNamespace.Tween
 
             float fluctuatingAmount = Mathf.Cos(cyclicFrequency * time);
 
-            color.a = Mathf.Lerp(0f, 1f, fluctuatingAmount);
+            color.a = fluctuatingAmount;
 
             return color;
         }
-        
-        
     }
 }

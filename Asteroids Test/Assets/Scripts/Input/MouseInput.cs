@@ -12,6 +12,10 @@ public class MouseInput : IInput
         {
             player.Accelerate();
         }
+        else
+        {
+            player.SlowDown();
+        }
 
         if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0))
         {

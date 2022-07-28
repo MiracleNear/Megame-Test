@@ -1176,7 +1176,7 @@ MonoBehaviour:
   _ufoFactory: {fileID: 475290439}
   _minAppearanceDelayTime: 20
   _maxAppearanceDelayTime: 40
-  _ufoCollider: {fileID: 8178327255989424429, guid: 9523583d658be0d429661b0cba680707, type: 3}
+  _ufoCollider: {fileID: 5067477251684693352, guid: 9523583d658be0d429661b0cba680707, type: 3}
 --- !u!1 &741948041
 GameObject:
   m_ObjectHideFlags: 0

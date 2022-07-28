@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 7242010984142021124}
   - component: {fileID: -3738042288960061532}
   - component: {fileID: -2409516755226448384}
-  - component: {fileID: -3167745543415350736}
   - component: {fileID: -3418179284872790766}
-  - component: {fileID: 1334474540007560906}
+  - component: {fileID: -2764832611452911436}
+  - component: {fileID: -405492378789202504}
   m_Layer: 7
   m_Name: Asteroid
   m_TagString: Untagged
@@ -99,18 +99,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _explosionSfx: {fileID: 6292913483208083912, guid: 5e0d315e4be480b48ae6600bb4fef87e, type: 3}
---- !u!114 &-3167745543415350736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8344792978632414620}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d75b272bab4380a6f008485a6bed9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &-3418179284872790766
 Rigidbody2D:
   serializedVersion: 4
@@ -132,8 +120,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 7
---- !u!58 &1334474540007560906
-CircleCollider2D:
+--- !u!61 &-2764832611452911436
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -146,5 +134,27 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 0.8828125}
+    newSize: {x: 1, y: 0.8828125}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Size: {x: 1, y: 0.8828125}
+  m_EdgeRadius: 0
+--- !u!114 &-405492378789202504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8344792978632414620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e57257b740be4ba7bb9501098bfc051a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

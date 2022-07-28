@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace ObjectPools
@@ -10,79 +9,56 @@ namespace ObjectPools
          [SerializeField] private int _additionCapacity = 16;
          [SerializeField] private T _template;
          
-         private List<PoolElement> _pool;
+         private Stack<T> _pool;
 
          private void Awake()
          {
-             CreatePool();
-         }
-
-         private void CreatePool()
-         {
-             _pool = new List<PoolElement>(_baseCapacity);
-             
-             SpawnElements(_baseCapacity);
-         }
-         
-         private void SpawnElements(int count)
-         {
-             for (int i = 0; i < count; i++)
-             {
-                 T template = Instantiate(_template, transform);
-
-                 template.gameObject.SetActive(false);
-
-                 PoolElement poolElement = new PoolElement(template);
-                 
-                 _pool.Add(poolElement);
-             }
+             CreatePool(_baseCapacity);
          }
 
          public T GetFreeElement()
          {
-             PoolElement poolElement = _pool.FirstOrDefault(poolElement => poolElement.IsUsing == false);
-
-             if (poolElement != null)
+             if (_pool.Count == 0)
              {
-                 GameObject gameObject = poolElement.Template.gameObject;
-                 
-                 gameObject.SetActive(true);
-                 gameObject.transform.SetParent(null);
-                 poolElement.IsUsing = true;
+                 CreatePool(_additionCapacity);
+             }
 
-                 return poolElement.Template;
-             }
-             else
-             {
-                 SpawnElements(_additionCapacity);
-                 return GetFreeElement();
-             }
+             return Release(_pool.Pop(), true);
          }
 
          public void ReturnToPool(T element)
          {
-             PoolElement poolElement = _pool.FirstOrDefault(poolElement => poolElement.Template == element);
+             _pool.Push(Release(element, false));
+         }
 
-             if (poolElement != null)
+         private void CreatePool(int capacity)
+         {
+             _pool = new Stack<T>(capacity);
+             
+             Fill(capacity);
+         }
+
+         private void Fill(int count)
+         {
+             for (int i = 0; i < count; i++)
              {
-                 poolElement.IsUsing = false;
-                 element.gameObject.SetActive(false);
-                 element.transform.SetParent(transform);
+                 _pool.Push(CreateTemplate());
              }
          }
-         
-         
 
-         private class PoolElement
+         private T CreateTemplate()
          {
-             public T Template;
-             public bool IsUsing;
+             T template = Instantiate(_template);
 
-             public PoolElement(T template)
-             {
-                 Template = template;
-             }
-             
+             return Release(template, false);
+         }
+
+         private T Release(T poolElement, bool isActive)
+         {
+             poolElement.gameObject.SetActive(isActive);
+             poolElement.transform.parent = isActive ? null : transform;
+
+             return poolElement;
          }
     }
 }

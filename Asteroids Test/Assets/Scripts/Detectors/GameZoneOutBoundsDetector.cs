@@ -3,52 +3,52 @@ using UnityEngine;
 
 namespace Detectors
 {
-    public enum ExitSide
+    [RequireComponent(typeof(BoxCollider2D))]
+    public class GameZoneOutBoundsDetector : MonoBehaviour
     {
-        None,
-        Vertical,
-        Horizontal,
-    }
-    
-    public class GameZoneOutBoundsDetector
-    {
-        private Collider2D _collider;
-        private Vector2 _halfScreenSize => ScreenBoundSize.HalfSize;
+        private bool _isPreviousPositionInGameZone;
+        private Vector2 _displacedBorder;
 
-        public GameZoneOutBoundsDetector(Collider2D collider)
+        private void Awake()
         {
-            _collider = collider;
+            _displacedBorder = ScreenBoundSize.HalfSize + (Vector2)GetComponent<BoxCollider2D>().bounds.extents;
         }
 
-        public bool IsOutBoundsGameZone(Vector2 position, out ExitSide exitSide)
+        private void OnDisable()
         {
-            Vector2 extentsCollider = _collider.bounds.extents;
-            
-            if (IsPositionOutBounds(position.x, _halfScreenSize.x, extentsCollider.x))
-            {
-                exitSide = ExitSide.Vertical;
-                return true;
-            }
-            else if(IsPositionOutBounds(position.y, _halfScreenSize.y, extentsCollider.y))
-            {
-                exitSide = ExitSide.Horizontal;
-                return true;
-            }
-
-            exitSide = ExitSide.None;
-            return false;
+            _isPreviousPositionInGameZone = false;
         }
         
-        private bool IsPositionOutBounds(float position, float halfScreenSize, float offsetByColliderExtents)
+        private void LateUpdate()
         {
-            float displacedBorder = halfScreenSize + offsetByColliderExtents;
+            TryReflectPosition(transform.position);
+        }
 
-            if (position < -displacedBorder || position > displacedBorder)
+        private void TryReflectPosition(Vector2 position)
+        {
+            if (_isPreviousPositionInGameZone)
             {
-                return true;
+                if (IsPositionOutBounds(position.x, _displacedBorder.x)) position.x = -position.x;
+
+                if (IsPositionOutBounds(position.y, _displacedBorder.y)) position.y = -position.y;
             }
 
-            return false;
+            transform.position = position;
+            
+            _isPreviousPositionInGameZone = IsPositionInBounds();
+        }
+        
+        private bool IsPositionOutBounds(float position, float displacedBorderPosition)
+        {
+            return (position < -displacedBorderPosition || position > displacedBorderPosition) && _isPreviousPositionInGameZone;
+        }
+
+        private bool IsPositionInBounds()
+        {
+            Vector2 position = transform.position;
+            
+            return position.x >= -_displacedBorder.x && position.x <= _displacedBorder.x &&
+                   position.y >= -_displacedBorder.y && position.y <= _displacedBorder.y;
         }
     }
 }

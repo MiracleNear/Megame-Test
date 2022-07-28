@@ -11,6 +11,8 @@ namespace Factories
         {
             enemy.Init(config, position, direction);
             
+            
+            
             return enemy;
         }
     }
