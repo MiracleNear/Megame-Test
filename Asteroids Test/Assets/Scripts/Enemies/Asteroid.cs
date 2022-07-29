@@ -6,28 +6,11 @@ namespace Enemies
 {
     public class Asteroid : Enemy
     {
-        public event Action<Asteroid> BulletHit;
+        public int t;
 
-        public event Action<Asteroid> Died;
-
-        public AsteroidType AsteroidType { get; private set; }
-        
-        public void Init(AsteroidType asteroidType)
+        private void Update()
         {
-            AsteroidType = asteroidType;
-        }
-        
-        public override void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
-        {
-            IsDestroyByPlayer(bullet);
-
-            BulletHit?.Invoke(this);
-
-            onCollisionSuccessful?.Invoke();
-            
-            PlaySoundDeath();
-            
-            Died?.Invoke(this);
+            Move();
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -36,13 +19,7 @@ namespace Enemies
             {
                 handler.OnCollisionAsteroid();
                 PlaySoundDeath();
-                Died?.Invoke(this);
             }
-        }
-
-        private void Update()
-        {
-            Move();
         }
     }
 }

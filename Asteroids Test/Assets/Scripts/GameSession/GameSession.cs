@@ -40,9 +40,7 @@ public class GameSession : MonoBehaviour
 	}
 	
 	private void OnSpawned(Player player)
-	{
-		_enemySpawnerInitializer.Init(player);
-		
+	{	
 		_inputHandler.BindPlayer(player);
 		
 		player.Died += OnDied;
@@ -50,8 +48,6 @@ public class GameSession : MonoBehaviour
 
 	private void OnDied()
 	{
-		_enemySpawnerInitializer.Dispose();
-
 		_playerLife.DecreaseByOne();
 
 		if(_playerLife.Amount < 0)

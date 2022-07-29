@@ -5,56 +5,24 @@ using UnityEngine;
 
 namespace Factories
 {
-    public enum AsteroidType
-    {
-        Average,
-        Small,
-        Large,
-    }
-    
     [RequireComponent(typeof(AsteroidPool))]
-    public class AsteroidFactory : EnemyFactory<Asteroid>
+    public class AsteroidFactory : EnemyFactory
     {
-        [SerializeField]
-        private EnemyConfig _asteroidLargeConfig, _asteroidAverageConfig, _asteroidSmallConfig;
-
         private IObjectPool<Asteroid> _asteroidsPool;
-        
-        private void Awake()
+
+		private void Awake()
         {
             _asteroidsPool = GetComponent<AsteroidPool>();
         }
 
-        public Asteroid CreateAsteroid(AsteroidType asteroidType, Vector2 position, Vector2 direction)
+        protected override Enemy GetInstance()
         {
-            EnemyConfig enemyConfig = GetAsteroidConfigByType(asteroidType);
-            
-            
-            Asteroid asteroid = _asteroidsPool.GetFreeElement();
-            
-            asteroid.Init(asteroidType);
-            
-            return Create(asteroid, enemyConfig, position, direction);
+            return _asteroidsPool.GetFreeElement();
         }
 
-        public override void Reclaim(Asteroid enemy)
-        {
-            _asteroidsPool.ReturnToPool(enemy);
-        }
-        
-        private EnemyConfig GetAsteroidConfigByType(AsteroidType asteroidType)
-        {
-            switch (asteroidType)
-            {
-                case AsteroidType.Average:
-                    return _asteroidAverageConfig;
-                case AsteroidType.Small:
-                    return _asteroidSmallConfig;
-                case AsteroidType.Large:
-                    return _asteroidLargeConfig;
-                default:
-                    throw new Exception("no such config");
-            }
-        }
-    }
+		public override void Reclaim(Enemy enemy)
+		{
+            _asteroidsPool.ReturnToPool(enemy as Asteroid);
+		}
+	}
 }

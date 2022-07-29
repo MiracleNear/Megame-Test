@@ -3,23 +3,23 @@ using UnityEngine;
 
 namespace Factories
 {
-    public class UfoFactory : EnemyFactory<Ufo>
+    public class UfoFactory : EnemyFactory
     {
-        [SerializeField] private EnemyConfig _ufoConfig;
         [SerializeField] private Ufo _template;
 
-        public Ufo Create(Vector2 position, Vector2 direction, Transform target)
-        {
-            Ufo ufo = Instantiate(_template);
-            
-            ufo.Init(target);
-            
-            return Create(ufo, _ufoConfig, position, direction);
-        }
+		public override void Reclaim(Enemy enemy)
+		{
+			Ufo ufo = enemy as Ufo;
 
-        public override void Reclaim(Ufo enemy)
-        {
-            Destroy(enemy.gameObject);
-        }
-    }
+			if(ufo != null)
+			{
+				Destroy(ufo);
+			}
+		}
+
+		protected override Enemy GetInstance()
+		{
+			return Instantiate(_template);
+		}
+	}
 }

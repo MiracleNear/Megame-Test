@@ -7,8 +7,6 @@ namespace Enemies
     [RequireComponent(typeof(UfoWeapon))]
     public class Ufo : Enemy, IAsteroidCollisionHandler
     {
-        public event Action Died;
-
         private Transform _target;
         private UfoWeapon _ufoWeapon;
 
@@ -24,20 +22,9 @@ namespace Enemies
         
         public void OnCollisionAsteroid()
         {
-            Died?.Invoke();
+            DestroySelf();
         }
 
-        public override void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
-        {
-            if(IsDestroyByPlayer(bullet))
-            {
-                Died?.Invoke();
-                PlaySoundDeath();
-                onCollisionSuccessful?.Invoke();
-            }
-        }
-
-	
         private void Update()
         {
             Move();
@@ -47,6 +34,5 @@ namespace Enemies
                 _ufoWeapon.Shoot((_target.position - transform.position).normalized);
             }
         }
-
 	}
 }

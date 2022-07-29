@@ -46,9 +46,9 @@ namespace DefaultNamespace.Score
             enemy.DestroyedByPlayer += OnDestroyedByPlayer;
         }
 
-        private void OnDestroyedByPlayer(int points)
+        private void OnDestroyedByPlayer(Enemy enemy)
         {
-            _points += points;
+            _points += enemy.Points;
             _scoreView.UpdateScore(_points);
         }
     }

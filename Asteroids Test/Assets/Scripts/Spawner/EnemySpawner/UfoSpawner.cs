@@ -1,114 +1,46 @@
 ﻿using System.Collections;
 using DefaultNamespace;
-using Enemies;
-using Factories;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Spawner
 {
-    public class UfoSpawner : EnemySpawner
-    {
-        [SerializeField] private UfoFactory _ufoFactory;
-        [SerializeField] private int _minAppearanceDelayTime, _maxAppearanceDelayTime;
+	public class UfoSpawner : EnemySpawner
+	{
         [SerializeField] private Collider2D _ufoCollider;
-        [SerializeField] private float _offsetFromTheHorizontalBorderInPercent = 20f;
-            
-        private UfoSpawnPoint[] _ufoSpawnPoints;
-        private Transform _target;
-        private Coroutine _spawnWithDelay;
-        private Ufo _activeUfo;
+        [SerializeField] private float _offsetFromTheVerticalBorderInPercent;
 
-        private void Awake()
+        private float _maxVerticalPositionSpawn;
+        private float _minVerticalPositionSpawn;
+        private float _leftHorizontalPosition;
+        private float _rightHorizontalPosition;
+
+        protected override void InitSpawner()
         {
-            float offset = (ScreenBoundSize.HalfSize.y / 100f) * _offsetFromTheHorizontalBorderInPercent;
+            float offsetFromTheVerticalBorder =
+                (ScreenBoundSize.HalfSize.y / 100f) * _offsetFromTheVerticalBorderInPercent;
 
-            float maxVerticalPositionSpawn = ScreenBoundSize.HalfSize.y - offset;
-            float minVerticalPositionSpawn = maxVerticalPositionSpawn;
+            _maxVerticalPositionSpawn = ScreenBoundSize.HalfSize.y - offsetFromTheVerticalBorder;
+            _minVerticalPositionSpawn = -_maxVerticalPositionSpawn;
 
             float horizontalPosition = ScreenBoundSize.HalfSize.x + _ufoCollider.bounds.size.x;
 
-            _ufoSpawnPoints = new[]
-            {
-                new UfoSpawnPoint(horizontalPosition, minVerticalPositionSpawn, maxVerticalPositionSpawn, Vector2.left),
-                new UfoSpawnPoint(-horizontalPosition, maxVerticalPositionSpawn, maxVerticalPositionSpawn,
-                    Vector2.right),
-            };
+            _leftHorizontalPosition = -horizontalPosition;
+            _rightHorizontalPosition = horizontalPosition;
+
         }
-        
-        public override void Init(Transform target)
-		{
-            _target = target;
-
-            _spawnWithDelay = StartCoroutine(SpawnWithDelay(GetAppearanceDelayTimeUfo()));
-		}
-
-        public override void Dispose()
+        protected override Vector2 GetPosition()
         {
-            StopCoroutine(_spawnWithDelay);
+            float randomVerticalPosition = Random.Range(_minVerticalPositionSpawn, _maxVerticalPositionSpawn);
 
-            Remove();
+            return Random.value >= 0.5f
+                ? new Vector2(_rightHorizontalPosition, randomVerticalPosition)
+                : new Vector2(_leftHorizontalPosition, randomVerticalPosition);
         }
 
-
-        private void Remove()
+        protected override Vector2 GetDirectionFrom(Vector2 position)
         {
-            if(_activeUfo != null)
-            {
-                _ufoFactory.Reclaim(_activeUfo);
-                Revoke(_activeUfo);
-            }
-        }
-
-        private IEnumerator SpawnWithDelay(int delay)
-        {
-            yield return new WaitForSeconds(delay);
-
-            UfoSpawnPoint randomSpawnPoint = GetRandomSpawnPoint();
-            
-            _activeUfo = _ufoFactory.Create(randomSpawnPoint.GetPosition(), randomSpawnPoint.GetDirection(), _target);
-
-            _activeUfo.Died += Remove;
-            
-            Add(_activeUfo);
-        }
-
-        private int GetAppearanceDelayTimeUfo()
-        {
-            return Random.Range(_minAppearanceDelayTime, _maxAppearanceDelayTime + 1);
-        }
-
-        private UfoSpawnPoint GetRandomSpawnPoint()
-        {
-            int randomIndexSpawnPoint = Random.Range(0, _ufoSpawnPoints.Length);
-
-            return _ufoSpawnPoints[randomIndexSpawnPoint];
-        }
-
-        private class UfoSpawnPoint
-        {
-            private float _horizontalPosition, _minVerticalPositionSpawn, _maxVerticalPositionSpawn;
-            private Vector2 _direction;
-            
-            public UfoSpawnPoint(float horizontalPosition, float minVerticalPositionSpawn, float maxVerticalPositionSpawn, Vector2 direction)
-            {
-                _horizontalPosition = horizontalPosition;
-                _minVerticalPositionSpawn = minVerticalPositionSpawn;
-                _maxVerticalPositionSpawn = maxVerticalPositionSpawn;
-                _direction = direction;
-            }
-
-            public Vector2 GetPosition()
-            {
-                float randomVerticalPosition = Random.Range(_minVerticalPositionSpawn, _maxVerticalPositionSpawn);
-
-                return new Vector2(_horizontalPosition, randomVerticalPosition);
-            }
-
-            public Vector2 GetDirection()
-            {
-                return _direction;
-            }
+            return position.x > 0 ? Vector2.left : Vector2.right;
         }
     }
 }

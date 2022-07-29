@@ -10,53 +10,54 @@ namespace Enemies
     [RequireComponent(typeof(GameZoneOutBoundsDetector))]
     public abstract class Enemy : MonoBehaviour, IBulletCollisionHandler
     {
-        public event Action<int> DestroyedByPlayer;
+        public event Action<Enemy> DestroyedByPlayer;
+
+        public event Action<Enemy> Died;
+        public EnemyType Type { get; private set; }
         public int Points { get; private set; }
-        public Vector3 Direction { get; private set; }
+        public Vector3 Direction { get; set; }
 
         [SerializeField] private ExplosionSFX _explosionSfx;
         
         private float _speed;
         private AudioClip _deathSound;
         
-        public void Init(EnemyConfig enemyConfig, Vector2 position, Vector2 direction)
-        { 
-            Direction = direction;
+        public void Init(EnemyConfig enemyConfig, EnemyType type)
+        {
+            Type = type;
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
             _deathSound = enemyConfig.DeathSound;
-            
-            transform.position = position;
             transform.localScale = enemyConfig.Scale;
             Points = enemyConfig.Points;
         }
 
-        public abstract void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful);
-
-        protected bool IsDestroyByPlayer(Bullet bullet)
+        public void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
 		{
-            if(BulletType.Player == bullet.Type)
+            if(bullet.Type == BulletType.Player)
 			{
-                DestroyByPlayer();
-                return true;
-			}
+                DestroyedByPlayer?.Invoke(this);
 
-            return false; 
+                DestroySelf();
+			}
 		}
+
 
         protected void Move()
         {
             transform.position = transform.position + Direction * (_speed * Time.deltaTime);
         }
 
+
+        protected void DestroySelf()
+		{
+            Died?.Invoke(this);
+            PlaySoundDeath();
+		}
+
         protected void PlaySoundDeath()
         {
             Instantiate(_explosionSfx).Init(_deathSound);
         }
         
-
-        private void DestroyByPlayer()
-		{
-            DestroyedByPlayer?.Invoke(Points);
-		}
     }
 }
