@@ -10,17 +10,16 @@ namespace Enemies
     [RequireComponent(typeof(GameZoneOutBoundsDetector))]
     public abstract class Enemy : MonoBehaviour, IBulletCollisionHandler
     {
-        public event Action<Enemy> DestroyedByPlayer;
-
+        public event Action<int> DestroyedByPlayer;
         public event Action<Enemy> Died;
         public EnemyType Type { get; private set; }
-        public int Points { get; private set; }
         public Vector3 Direction { get; set; }
 
         [SerializeField] private ExplosionSFX _explosionSfx;
         
         private float _speed;
         private AudioClip _deathSound;
+        private int _points;
         
         public void Init(EnemyConfig enemyConfig, EnemyType type)
         {
@@ -28,20 +27,25 @@ namespace Enemies
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
             _deathSound = enemyConfig.DeathSound;
             transform.localScale = enemyConfig.Scale;
-            Points = enemyConfig.Points;
+            _points = enemyConfig.Points;
         }
 
-        public void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
+        public  void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
 		{
             if(bullet.Type == BulletType.Player)
 			{
-                DestroyedByPlayer?.Invoke(this);
-
+                OnDestroyByPlayer();
+                DestroyedByPlayer?.Invoke(_points);
+                onCollisionSuccessful?.Invoke();
                 DestroySelf();
-			}
+            }
 		}
 
-
+        protected virtual void OnDestroyByPlayer()
+        {
+            
+        }
+        
         protected void Move()
         {
             transform.position = transform.position + Direction * (_speed * Time.deltaTime);

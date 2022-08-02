@@ -8,9 +8,10 @@ namespace Factories
     [RequireComponent(typeof(AsteroidPool))]
     public class AsteroidFactory : EnemyFactory
     {
+        [SerializeField] private EnemyConfig _asteroidLargeConfig, _asteroidMediumConfig, _asteroidSmallConfig;
+        
         private IObjectPool<Asteroid> _asteroidsPool;
-
-		private void Awake()
+        private void Awake()
         {
             _asteroidsPool = GetComponent<AsteroidPool>();
         }
@@ -20,9 +21,24 @@ namespace Factories
             return _asteroidsPool.GetFreeElement();
         }
 
-		public override void Reclaim(Enemy enemy)
-		{
+        protected override EnemyConfig GetConfigByType(EnemyType enemyType)
+        {
+            switch(enemyType)
+            {
+                case EnemyType.SmallAsteroid:
+                    return _asteroidSmallConfig;
+                case EnemyType.MediumAsteroid:
+                    return _asteroidMediumConfig;
+                case EnemyType.LargeAsteroid:
+                    return _asteroidLargeConfig;
+                default:
+                    throw new Exception("no such type");
+            }
+        }
+
+        public override void Reclaim(Enemy enemy)
+        {
             _asteroidsPool.ReturnToPool(enemy as Asteroid);
-		}
+        }
 	}
 }

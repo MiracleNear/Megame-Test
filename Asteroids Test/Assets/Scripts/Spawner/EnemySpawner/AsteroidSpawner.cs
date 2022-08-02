@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using DefaultNamespace;
+﻿using DefaultNamespace;
 using Enemies;
 using Factories;
 using UnityEngine;

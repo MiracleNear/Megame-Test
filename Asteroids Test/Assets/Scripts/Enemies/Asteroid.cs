@@ -1,12 +1,20 @@
 ﻿using System;
-using Factories;
+using Spawner;
 using UnityEngine;
 
 namespace Enemies
 {
+    [RequireComponent(typeof(AsteroidPartSpawner))]
     public class Asteroid : Enemy
     {
-        public int t;
+        public event Action<Asteroid> BulletHit;
+
+        public AsteroidPartSpawner AsteroidPartSpawner { get; private set; }
+        
+        private void Awake()
+        {
+            AsteroidPartSpawner = GetComponent<AsteroidPartSpawner>();
+        }
 
         private void Update()
         {
@@ -18,8 +26,14 @@ namespace Enemies
             if (other.gameObject.TryGetComponent(out IAsteroidCollisionHandler handler))
             {
                 handler.OnCollisionAsteroid();
+                DestroySelf();
                 PlaySoundDeath();
             }
+        }
+        
+        protected override void OnDestroyByPlayer()
+        {
+            BulletHit?.Invoke(this);
         }
     }
 }

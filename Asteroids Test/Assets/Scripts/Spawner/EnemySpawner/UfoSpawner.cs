@@ -1,5 +1,6 @@
-﻿using System.Collections;
-using DefaultNamespace;
+﻿using DefaultNamespace;
+using Enemies;
+using Factories;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -27,7 +28,6 @@ namespace Spawner
 
             _leftHorizontalPosition = -horizontalPosition;
             _rightHorizontalPosition = horizontalPosition;
-
         }
         protected override Vector2 GetPosition()
         {

@@ -317,6 +317,7 @@ GameObject:
   - component: {fileID: 199135225}
   - component: {fileID: 199135226}
   - component: {fileID: 199135227}
+  - component: {fileID: 199135228}
   m_Layer: 0
   m_Name: Game Session
   m_TagString: Untagged
@@ -381,9 +382,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1a490f8ace6f8c4ebd09a2679b7d911, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemySpawners:
-  - {fileID: 738207964}
-  - {fileID: 519989716}
 --- !u!114 &199135226
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -412,6 +410,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _menu: {fileID: 910153807}
   _gameLaunch: {fileID: 155743944}
+--- !u!114 &199135228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 199135221}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e26b8b0d41f41709cf2b108446a4805, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _asteroidGenerator: {fileID: 519989717}
+  _ufoGenerator: {fileID: 738207965}
+  _startingNumberOfAsteroids: 2
 --- !u!1 &217917868
 GameObject:
   m_ObjectHideFlags: 0
@@ -727,7 +740,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _asteroidLargeConfig: {fileID: 11400000, guid: 1d4362da7837a6442bc1831020e01fb4, type: 2}
-  _asteroidAverageConfig: {fileID: 11400000, guid: 42aeeaa8353ddee4e9b201bca6efe11f, type: 2}
+  _asteroidMediumConfig: {fileID: 11400000, guid: 42aeeaa8353ddee4e9b201bca6efe11f, type: 2}
   _asteroidSmallConfig: {fileID: 11400000, guid: 90114904118dfc740b3ab1c34a93bd8b, type: 2}
 --- !u!114 &355272753
 MonoBehaviour:
@@ -904,6 +917,7 @@ GameObject:
   m_Component:
   - component: {fileID: 519989715}
   - component: {fileID: 519989716}
+  - component: {fileID: 519989717}
   m_Layer: 0
   m_Name: Asteroid Spawner
   m_TagString: Untagged
@@ -937,8 +951,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9961939f98894489bc7df2143f6b8c34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _asteroidCollider: {fileID: -2764832611452911436, guid: 0b1e255093cf46b4e86884fe601f76de, type: 3}
+--- !u!114 &519989717
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519989714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13fb2bebf71493687d54471b5ffae41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   _enemyPublisher: {fileID: 269610335}
-  _asteroidFactory: {fileID: 355272752}
+  _enemyFactory: {fileID: 355272752}
 --- !u!1 &639904286
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,6 +1166,7 @@ GameObject:
   m_Component:
   - component: {fileID: 738207963}
   - component: {fileID: 738207964}
+  - component: {fileID: 738207965}
   m_Layer: 0
   m_Name: Ufo Spawner
   m_TagString: Untagged
@@ -1172,11 +1200,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba6921628e64bab98c4b17ad884f55f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPublisher: {fileID: 269610335}
-  _ufoFactory: {fileID: 475290439}
-  _minAppearanceDelayTime: 20
-  _maxAppearanceDelayTime: 40
   _ufoCollider: {fileID: 5067477251684693352, guid: 9523583d658be0d429661b0cba680707, type: 3}
+  _offsetFromTheVerticalBorderInPercent: 20
+--- !u!114 &738207965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738207962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3218a012485044ef83f95927b47dd050, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyPublisher: {fileID: 269610335}
+  _enemyFactory: {fileID: 475290439}
+  _minAppearanceTime: 20
+  _maxAppearanceTime: 40
 --- !u!1 &741948041
 GameObject:
   m_ObjectHideFlags: 0
