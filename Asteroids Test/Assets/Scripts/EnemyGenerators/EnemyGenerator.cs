@@ -4,60 +4,54 @@ using Factories;
 using Spawner;
 using UnityEngine;
 
-public abstract class EnemyGenerator<T> : MonoBehaviour where T : Enemy
+public class EnemyGenerator<T> : MonoBehaviour where T : Enemy
 {
+    [SerializeField] private EnemyFactory<T> _enemyFactory;
     [SerializeField] private EnemyPublisher _enemyPublisher;
-    [SerializeField] private EnemyFactory _enemyFactory;
-    
-    protected EnemySpawner EnemySpawner;
-    
-    private Action<T> _generated;
-    private Action<T> _removed;
 
-    public virtual void Init(Action<T> generated, Action<T> removed)
+    private Action<T> _removed;
+    
+    public void Init(Action<T> removed)
     {
-        _generated = generated;
         _removed = removed;
     }
-
-    public abstract void Generate(EnemyType type, int count);
-
-    protected T GetEnemy(EnemyType enemyType, EnemySpawner enemySpawner)
+    
+    public T Create(EnemyType enemyType, IEnemyPlacer enemyPlacer)
     {
-        T enemy = _enemyFactory.Get(enemyType) as T;
-        enemySpawner.Spawn(enemy);
-        SendGeneratedEnemy(enemy);
+        var enemy =  _enemyFactory.Get(enemyType);
+        
+        PlaceEnemy(enemy, enemyPlacer);
+    
+        SendEnemy(enemy);
         
         return enemy;
     }
 
-    protected virtual void Removed(T enemy)
+    private void PlaceEnemy(T enemy, IEnemyPlacer enemyPlacer)
     {
-        _removed?.Invoke(enemy);
-    }
+        Vector2 position = enemyPlacer.GetPosition();
+        Vector2 direction = enemyPlacer.GetDirectionFrom(position);
 
-    private void SendGeneratedEnemy(T enemy)
-    {
-        _generated?.Invoke(enemy);
-        SubScribe(enemy);
+        enemy.transform.position = position;
+        enemy.Direction = direction;
     }
-
-    private void OnDied(Enemy enemy)
-    {
-        UnSubscribe(enemy);
-        Removed(enemy as T);
-    }
-
-    private void SubScribe(Enemy enemy)
+    
+    private void SendEnemy(T enemy)
     {
         enemy.Died += OnDied;
         _enemyPublisher.Publish(enemy);
     }
 
-    private void UnSubscribe(Enemy enemy)
+    private void OnDied(Enemy enemy)
+    {
+       DestroyEnemy(enemy as T);
+    }
+
+    private void DestroyEnemy(T enemy)
     {
         enemy.Died -= OnDied;
         _enemyPublisher.Remove(enemy);
+        _removed.Invoke(enemy);
         _enemyFactory.Reclaim(enemy);
     }
 }

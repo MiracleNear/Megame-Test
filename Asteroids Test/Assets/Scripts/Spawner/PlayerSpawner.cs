@@ -11,29 +11,25 @@ namespace Spawner
         [SerializeField] private Vector2 _position;
         [SerializeField] private int _spawnDelayAfterDeath;
 
-        private Action<Player> _spawned;
-       
-        public void Init(Action<Player> spawned)
+        public event Action<Player> Spawned;
+        
+        
+        public void InitialSpawn()
+        {
+            SpawnPlayer();
+        }
+
+        public void SpawnPlayerWithDelay()
 		{
-            _spawned = spawned;
+            StartCoroutine(SpawnWithDelay());
 		}
 
         private void SpawnPlayer()
         {
             Player player = Instantiate(_player, _position, quaternion.identity);
             
-            _spawned?.Invoke(player);
+            Spawned?.Invoke(player);
         }
-
-        public void InitialSpawn()
-		{
-            SpawnPlayer();
-		}
-
-        public void SpawnPlayerWithDelay()
-		{
-            StartCoroutine(SpawnWithDelay());
-		}
 
         private IEnumerator SpawnWithDelay()
         {

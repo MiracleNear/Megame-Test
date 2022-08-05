@@ -1,6 +1,4 @@
-﻿using Factories;
-using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Enemies
 {
@@ -22,14 +20,19 @@ namespace Enemies
         
         public void OnCollisionAsteroid()
         {
-            DestroySelf();
+            Kill();
         }
 
+        public void Kill()
+        {
+            DestroySelf();
+        }
+        
         private void Update()
         {
             Move();
 
-            if (_ufoWeapon.CanShoot())
+            if (_target != null && _ufoWeapon.CanShoot())
             {
                 _ufoWeapon.Shoot((_target.position - transform.position).normalized);
             }

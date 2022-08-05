@@ -1,5 +1,5 @@
 ﻿using System;
-using DefaultNamespace.GameSession;
+using Spawner;
 using UnityEngine;
 
 public class InputHandler : MonoBehaviour
@@ -7,20 +7,31 @@ public class InputHandler : MonoBehaviour
     public event Action PauseButtonPressed;
 
     [SerializeField] private GameStarter _gameStarter;
+    [SerializeField] private PlayerSpawner _playerSpawner;
     
     private Player _player;
     private IInput _input;
-        
-    public void BindPlayer(Player player)
+
+    private void OnEnable()
     {
-        _player = player;
+        _playerSpawner.Spawned += BindPlayer;
+    }
+
+    private void OnDisable()
+    {
+        _playerSpawner.Spawned -= BindPlayer;
     }
 
     public void SetInput(IInput input)
     {
         _input = input;
     }
-        
+
+    private void BindPlayer(Player player)
+    {
+        _player = player;
+    }
+
     private void Update()
     {
         if(!_gameStarter.IsGameStarted) return;

@@ -1,29 +1,59 @@
-﻿using Enemies;
+﻿using System;
+using Enemies;
+using Factories;
 using UnityEngine;
 
 namespace Spawner
 {
-    public abstract class EnemySpawner : MonoBehaviour
+    public abstract class EnemySpawner<T> : MonoBehaviour, IEnemySpawner where T : Enemy
     {
-        private void Awake()
-        {
-            InitSpawner();
-        }
-
-        public void Spawn(Enemy enemy)
-        {
-            Vector2 position = GetPosition();
-            Vector2 direction = GetDirectionFrom(position);
-            
-            enemy.Direction = direction;
-            enemy.transform.position = position;
-        }
-
-        protected abstract void InitSpawner();
-
-        protected abstract Vector2 GetPosition();
-
-        protected abstract Vector2 GetDirectionFrom(Vector2 position);
+        [SerializeField] private EnemyGenerator<T> _enemyGenerator;
+        [SerializeField] private GameStarter _gameStarter;
         
+        protected IEnemyPlacer EnemyPlacer;
+
+        private void OnEnable()
+        {
+            SubScribe();
+        }
+
+        private void OnDisable()
+        {
+            UnSubscribe();
+        }
+
+        public void Init()
+        {
+            _enemyGenerator.Init(OnDestroyEnemy);
+            EnemyPlacer = GetComponent<EnemyPlacerFactory>().Get();
+        }
+
+        public virtual void InitialSpawn()
+        {
+            
+        }
+
+        protected virtual void SubScribe()
+        {
+            _gameStarter.GameLaunched += OnGameLaunched;
+        }
+
+        protected virtual void UnSubscribe()
+        {
+            _gameStarter.GameLaunched -= OnGameLaunched;
+        }
+        
+        protected abstract void OnDestroyEnemy(T enemy);
+
+        protected T Create(EnemyType enemyType, IEnemyPlacer enemyPlacer)
+        {
+            return _enemyGenerator.Create(enemyType, enemyPlacer);
+        }
+
+        private void OnGameLaunched()
+        {
+            Init();
+            InitialSpawn();
+        }
     }
 }

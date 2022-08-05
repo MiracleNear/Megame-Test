@@ -1,46 +1,85 @@
-﻿using DefaultNamespace;
+﻿using System.Collections;
 using Enemies;
 using Factories;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Spawner
 {
-	public class UfoSpawner : EnemySpawner
-	{
-        [SerializeField] private Collider2D _ufoCollider;
-        [SerializeField] private float _offsetFromTheVerticalBorderInPercent;
+    [RequireComponent(typeof(UfoPlacerFactory))]
+    public class UfoSpawner : EnemySpawner<Ufo>
+    {
+        [SerializeField] private float _minAppearanceTime, _maxAppearanceTime;
+        [SerializeField] private PlayerSpawner _playerSpawner;
 
-        private float _maxVerticalPositionSpawn;
-        private float _minVerticalPositionSpawn;
-        private float _leftHorizontalPosition;
-        private float _rightHorizontalPosition;
+        private Ufo _activeUfo;
+        private Player _target;
+        private Coroutine _spawnWithDelay;
 
-        protected override void InitSpawner()
+        protected override void SubScribe()
         {
-            float offsetFromTheVerticalBorder =
-                (ScreenBoundSize.HalfSize.y / 100f) * _offsetFromTheVerticalBorderInPercent;
-
-            _maxVerticalPositionSpawn = ScreenBoundSize.HalfSize.y - offsetFromTheVerticalBorder;
-            _minVerticalPositionSpawn = -_maxVerticalPositionSpawn;
-
-            float horizontalPosition = ScreenBoundSize.HalfSize.x + _ufoCollider.bounds.size.x;
-
-            _leftHorizontalPosition = -horizontalPosition;
-            _rightHorizontalPosition = horizontalPosition;
-        }
-        protected override Vector2 GetPosition()
-        {
-            float randomVerticalPosition = Random.Range(_minVerticalPositionSpawn, _maxVerticalPositionSpawn);
-
-            return Random.value >= 0.5f
-                ? new Vector2(_rightHorizontalPosition, randomVerticalPosition)
-                : new Vector2(_leftHorizontalPosition, randomVerticalPosition);
+            _playerSpawner.Spawned += OnSpawned;
+            
+            base.SubScribe();
         }
 
-        protected override Vector2 GetDirectionFrom(Vector2 position)
+        protected override void UnSubscribe()
         {
-            return position.x > 0 ? Vector2.left : Vector2.right;
+            _playerSpawner.Spawned -= OnSpawned;
+            
+            base.UnSubscribe();
+        }
+
+        protected override void OnDestroyEnemy(Ufo enemy)
+        {
+            SpawnUfo();
+        }
+
+        private void OnSpawned(Player player)
+        {
+            _target = player;
+            player.Died += OnDiedPlayer;
+            
+            SpawnUfo();
+        }
+
+        private void OnDiedPlayer()
+        {
+            if (_activeUfo != null)
+            {
+                _activeUfo.Kill();
+            }
+            else
+            {
+                ClearSpawn();
+            }
+        }
+
+        private void ClearSpawn()
+        {
+            if (_spawnWithDelay != null)
+            {
+                StopCoroutine(_spawnWithDelay);
+
+                _spawnWithDelay = null;
+            }
+        }
+
+        private void SpawnUfo()
+        {
+            ClearSpawn();
+            
+            _spawnWithDelay = StartCoroutine(SpawnWithDelay());
+        }
+
+        private IEnumerator SpawnWithDelay()
+        {
+            float appearanceTime = Random.Range(_minAppearanceTime, _maxAppearanceTime);
+                                    
+            yield return new WaitForSeconds(appearanceTime);
+
+            _activeUfo = Create(EnemyType.Ufo, EnemyPlacer);
+            
+            _activeUfo.Init(_target.transform);
         }
     }
 }

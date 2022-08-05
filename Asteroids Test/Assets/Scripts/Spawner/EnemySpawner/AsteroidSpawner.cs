@@ -1,58 +1,52 @@
-﻿using DefaultNamespace;
+﻿using System.Collections.Generic;
 using Enemies;
 using Factories;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Spawner
 {
-	public class AsteroidSpawner : EnemySpawner
-	{
-        [SerializeField] private Collider2D _asteroidCollider;
+    [RequireComponent(typeof(AsteroidPlacerFactory))]
+    public class AsteroidSpawner : EnemySpawner<Asteroid>
+    {
+        [SerializeField] private int _startAmount;
+        
+        private List<Asteroid> _activeAsteroids = new List<Asteroid>();
 
-        private float _minHorizontalPosition, _maxHorizontalPosition;
-        private float _minVerticalPosition, _maxVerticalPosition;
-
-        protected override void InitSpawner()
+        public override void InitialSpawn()
         {
-            _maxHorizontalPosition = ScreenBoundSize.HalfSize.x + _asteroidCollider.bounds.size.x;
-            _maxVerticalPosition = ScreenBoundSize.HalfSize.y + _asteroidCollider.bounds.size.y;
-
-            _minHorizontalPosition = -_maxHorizontalPosition;
-            _maxVerticalPosition = -_minVerticalPosition;
+            Spawn();
         }
 
-        protected override Vector2 GetPosition()
+        public void SpawnPartAsteroids(EnemyType asteroidPartType, IEnemyPlacer asteroidPartPlacer, int count)
         {
-            return GetRandomPosition();
+            CreateAsteroids(asteroidPartType, asteroidPartPlacer, count);
         }
 
-        protected override Vector2 GetDirectionFrom(Vector2 position)
+        protected override void OnDestroyEnemy(Asteroid asteroid)
         {
-            return (Random.insideUnitCircle - position).normalized;
+            _activeAsteroids.Remove(asteroid);
+
+            if (_activeAsteroids.Count == 0)
+            {
+                _startAmount++;
+                
+                Spawn();
+            }
         }
 
-        private Vector2 GetRandomPosition()
+        private void Spawn()
         {
-            return Random.value >= 0.5f ? GetRandomHorizontalPosition() : GetRandomVerticalPosition();
+            CreateAsteroids(EnemyType.LargeAsteroid, EnemyPlacer, _startAmount);
         }
 
-        private Vector2 GetRandomVerticalPosition()
+        private void CreateAsteroids(EnemyType asteroidType, IEnemyPlacer enemyPlacer, int count)
         {
-            float randomVerticalPosition = Random.Range(_minVerticalPosition, _maxVerticalPosition);
-
-            return Random.value >= 0.5f
-                ? new Vector2(_maxHorizontalPosition, randomVerticalPosition)
-                : new Vector2(_minHorizontalPosition, randomVerticalPosition);
-        }
-
-        private Vector2 GetRandomHorizontalPosition()
-        {
-            float randomHorizontalPosition = Random.Range(_minHorizontalPosition, _maxHorizontalPosition);
-
-            return Random.value >= 0.5f
-                ? new Vector2(randomHorizontalPosition, _maxVerticalPosition)
-                : new Vector2(randomHorizontalPosition, _minVerticalPosition);
+            for (int i = 0; i < count; i++)
+            {
+                Asteroid asteroid = Create(asteroidType, enemyPlacer);
+                
+                _activeAsteroids.Add(asteroid);
+            }
         }
     }
 }

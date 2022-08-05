@@ -1,52 +1,50 @@
-﻿using System.Collections.Generic;
-using Enemies;
-using Factories;
+﻿using Spawner;
 using UnityEngine;
 
-public class GameCycle : MonoBehaviour
+namespace GameSession
 {
-    [SerializeField] private EnemyGenerator<Asteroid> _asteroidGenerator;
-    [SerializeField] private EnemyGenerator<Ufo> _ufoGenerator;
-    [SerializeField] private int _startingNumberOfAsteroids;
-
-    private List<Asteroid> _activeAsteroids = new List<Asteroid>();
-    
-    private void Awake()
+    public class GameCycle : MonoBehaviour
     {
-        _asteroidGenerator.Init(OnSpawned, OnRemoved);
-        _ufoGenerator.Init(OnSpawned, OnRemoved);
-    }
-
-    private void Start()
-    {
-        _asteroidGenerator.Generate(EnemyType.LargeAsteroid, _startingNumberOfAsteroids);
-        _ufoGenerator.Generate(EnemyType.Ufo, 1);
-    }
-
-    private void OnSpawned(Asteroid asteroid)
-    {
-        _activeAsteroids.Add(asteroid);
-    }
-
-    private void OnRemoved(Asteroid asteroid)
-    {
-        _activeAsteroids.Remove(asteroid);
-
-        if (_activeAsteroids.Count == 0)
+        [SerializeField] private PlayerSpawner _playerSpawner;
+        [SerializeField] private PlayerLife _playerLife;
+        [SerializeField] private GameStarter _gameStarter;
+        private void OnEnable()
         {
-            _startingNumberOfAsteroids += 1;
-            
-            _asteroidGenerator.Generate(EnemyType.LargeAsteroid, _startingNumberOfAsteroids);
+            _gameStarter.GameLaunched += OnGameLaunched;
+            _playerSpawner.Spawned += OnSpawned;
         }
-    }
 
-    private void OnSpawned(Ufo ufo)
-    {
-        
-    }
+        private void OnDisable()
+        {
+            _gameStarter.GameLaunched -= OnGameLaunched;
+            _playerSpawner.Spawned += OnSpawned;
+        }
 
-    private void OnRemoved(Ufo ufo)
-    {
-        
+        private void OnGameLaunched()
+        {
+            _playerSpawner.InitialSpawn();
+        }
+
+        private void OnSpawned(Player player)
+        {
+            player.Died += OnDied;
+        }
+
+        private void OnDied()
+        {
+            if (_playerLife.TryDecrease())
+            {
+                _playerSpawner.SpawnPlayerWithDelay();
+            }
+            else
+            {
+                GameEnd();
+            }
+        }
+
+        private void GameEnd()
+        {
+            
+        }
     }
 }

@@ -1,21 +1,26 @@
-﻿using System;
+﻿using Factories;
 using Spawner;
 using UnityEngine;
 
 namespace Enemies
 {
-    [RequireComponent(typeof(AsteroidPartSpawner))]
+    [RequireComponent(typeof(AsteroidPartPlacerFactory))]
     public class Asteroid : Enemy
     {
-        public event Action<Asteroid> BulletHit;
+        private bool _isInit;
 
-        public AsteroidPartSpawner AsteroidPartSpawner { get; private set; }
+        private AsteroidSpawner _asteroidSpawner;
+        private IEnemyPlacer _asteroidPartPlacer;
         
-        private void Awake()
+        public void Init(AsteroidSpawner asteroidSpawner)
         {
-            AsteroidPartSpawner = GetComponent<AsteroidPartSpawner>();
+            if (!_isInit)
+            {
+                _asteroidSpawner = asteroidSpawner;
+                _asteroidPartPlacer = GetComponent<AsteroidPartPlacerFactory>().Get();
+            }
         }
-
+        
         private void Update()
         {
             Move();
@@ -30,10 +35,17 @@ namespace Enemies
                 PlaySoundDeath();
             }
         }
-        
+
         protected override void OnDestroyByPlayer()
         {
-            BulletHit?.Invoke(this);
+            if (Type == EnemyType.LargeAsteroid)
+            {
+                _asteroidSpawner.SpawnPartAsteroids(EnemyType.MediumAsteroid, _asteroidPartPlacer, 2);
+            }
+            else if (Type == EnemyType.MediumAsteroid)
+            {
+                _asteroidSpawner.SpawnPartAsteroids(EnemyType.SmallAsteroid, _asteroidPartPlacer, 2);
+            }
         }
     }
 }

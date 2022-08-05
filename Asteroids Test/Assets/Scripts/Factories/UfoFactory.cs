@@ -4,21 +4,16 @@ using UnityEngine;
 
 namespace Factories
 {
-    public class UfoFactory : EnemyFactory
+    public class UfoFactory : EnemyFactory<Ufo>
     {
         [SerializeField] private EnemyConfig _ufoConfig;
         [SerializeField] private Ufo _template;
-        public override void Reclaim(Enemy enemy)
+        public override void Reclaim(Ufo enemy)
         {
-            Ufo ufo = enemy as Ufo;
-
-            if(ufo != null)
-            {
-                Destroy(ufo);
-            }
+            Destroy(enemy.gameObject);
         }
 
-        protected override Enemy GetInstance()
+        protected override Ufo GetInstance()
         {
             return Instantiate(_template);
         }

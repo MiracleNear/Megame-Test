@@ -3,13 +3,11 @@
 [RequireComponent(typeof(PlayerLifeView))]
 public class PlayerLife : MonoBehaviour
 {
-    public int Amount => _amount;
-
+    [SerializeField] private int _amount;
     [SerializeField] private GameStarter _gameStarter;
     
     private PlayerLifeView _playerLifeView;
-    private int _amount = 3;
-        
+
     private void Awake()
     {
         _playerLifeView = GetComponent<PlayerLifeView>();
@@ -17,12 +15,18 @@ public class PlayerLife : MonoBehaviour
         
         gameObject.SetActive(false);
     }
-    
-    public void DecreaseByOne()
+
+    public bool TryDecrease()
     {
         _amount -= 1;
 
-        _playerLifeView.Display(_amount);
+        if (_amount >= 0)
+        {
+            _playerLifeView.Display(_amount);
+            return true;
+        }
+
+        return false;
     }
 
     private void OnGameLaunched()

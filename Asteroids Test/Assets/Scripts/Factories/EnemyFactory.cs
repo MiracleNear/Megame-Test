@@ -12,22 +12,22 @@ namespace Factories
         Ufo,
 	}
 
-    public abstract class EnemyFactory : MonoBehaviour
+    public abstract class EnemyFactory<T> : MonoBehaviour where T : Enemy
     {
-        public Enemy Get(EnemyType enemy)
+        public T Get(EnemyType enemy)
         {
             EnemyConfig enemyConfig = GetConfigByType(enemy);
 
-            Enemy enemyTemplate = GetInstance();
-
+            T enemyTemplate = GetInstance();
+            
             enemyTemplate.Init(enemyConfig, enemy);
-
+            
             return enemyTemplate;
         }
 
-        public abstract void Reclaim(Enemy enemy);
+        public abstract void Reclaim(T enemy);
 
-        protected abstract Enemy GetInstance();
+        protected abstract T GetInstance();
 
         protected abstract EnemyConfig GetConfigByType(EnemyType enemyType);
     }

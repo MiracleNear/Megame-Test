@@ -1,24 +1,30 @@
 ﻿using System;
 using Enemies;
 using ObjectPools;
+using Spawner;
 using UnityEngine;
 
 namespace Factories
 {
     [RequireComponent(typeof(AsteroidPool))]
-    public class AsteroidFactory : EnemyFactory
+    public class AsteroidFactory : EnemyFactory<Asteroid>
     {
         [SerializeField] private EnemyConfig _asteroidLargeConfig, _asteroidMediumConfig, _asteroidSmallConfig;
-        
+        [SerializeField] private AsteroidSpawner _asteroidSpawner;
+
         private IObjectPool<Asteroid> _asteroidsPool;
         private void Awake()
         {
             _asteroidsPool = GetComponent<AsteroidPool>();
         }
 
-        protected override Enemy GetInstance()
-        {
-            return _asteroidsPool.GetFreeElement();
+        protected override Asteroid GetInstance()
+        { 
+            Asteroid asteroid = _asteroidsPool.GetFreeElement();
+            
+            asteroid.Init(_asteroidSpawner);
+
+            return asteroid;
         }
 
         protected override EnemyConfig GetConfigByType(EnemyType enemyType)
@@ -36,9 +42,9 @@ namespace Factories
             }
         }
 
-        public override void Reclaim(Enemy enemy)
+        public override void Reclaim(Asteroid enemy)
         {
-            _asteroidsPool.ReturnToPool(enemy as Asteroid);
+            _asteroidsPool.ReturnToPool(enemy);
         }
 	}
 }
