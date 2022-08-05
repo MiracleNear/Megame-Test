@@ -3,10 +3,9 @@ using Factories;
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Bullet : MonoBehaviour
+public abstract class Bullet : MonoBehaviour
 {
-    public BulletFactory OriginFactory { get; set; }
-    public BulletType Type { get; private set; }
+    public IBulletFactory OriginFactory { get; set; }
     
     [SerializeField] private float _unitPerSecond;
     
@@ -25,13 +24,14 @@ public class Bullet : MonoBehaviour
         _maxDistance = ScreenBoundSize.Size.x;
     }
 
-    public void Init(Vector2 position, Vector3 direction, Color color, BulletType bulletType)
+    public void Init(Vector2 position, Vector3 direction, Color color)
     {
         _direction = direction;
         transform.position = position;
         _spriteRenderer.color = color;
-        Type = bulletType;
     }
+
+    protected abstract void OnCollisionEnter2D(Collision2D other);
 
     private void Update()
     {
@@ -50,14 +50,6 @@ public class Bullet : MonoBehaviour
 
         transform.position += direction * deltaMove;
         _distanceTraveled += deltaMove;
-    }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        if (other.gameObject.TryGetComponent(out IBulletCollisionHandler handler))
-        {
-            handler.OnCollisionBullet(this, Dispose);
-        }
     }
 
     private void Dispose()

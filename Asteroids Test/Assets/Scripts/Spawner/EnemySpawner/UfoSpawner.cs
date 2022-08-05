@@ -54,6 +54,13 @@ namespace Spawner
             }
         }
 
+        private void SpawnUfo()
+        {
+            ClearSpawn();
+            
+            _spawnWithDelay = StartCoroutine(SpawnWithDelay());
+        }
+
         private void ClearSpawn()
         {
             if (_spawnWithDelay != null)
@@ -62,13 +69,6 @@ namespace Spawner
 
                 _spawnWithDelay = null;
             }
-        }
-
-        private void SpawnUfo()
-        {
-            ClearSpawn();
-            
-            _spawnWithDelay = StartCoroutine(SpawnWithDelay());
         }
 
         private IEnumerator SpawnWithDelay()

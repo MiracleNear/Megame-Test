@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ObjectPools
 {
-    public abstract class ObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : MonoBehaviour
+    public abstract class ObjectPool<T> : MonoBehaviour, IObjectPool<T> where T : Component
     {
          [SerializeField] private int _baseCapacity = 16;
          [SerializeField] private int _additionCapacity = 16;

@@ -35,17 +35,5 @@ namespace Enemies
                 PlaySoundDeath();
             }
         }
-
-        protected override void OnDestroyByPlayer()
-        {
-            if (Type == EnemyType.LargeAsteroid)
-            {
-                _asteroidSpawner.SpawnPartAsteroids(EnemyType.MediumAsteroid, _asteroidPartPlacer, 2);
-            }
-            else if (Type == EnemyType.MediumAsteroid)
-            {
-                _asteroidSpawner.SpawnPartAsteroids(EnemyType.SmallAsteroid, _asteroidPartPlacer, 2);
-            }
-        }
     }
 }

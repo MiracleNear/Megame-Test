@@ -7,7 +7,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerWeapon))]
 [RequireComponent(typeof(Invulnerability))]
 [RequireComponent(typeof(AudioSource))]
-public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollisionHandler
+public class Player : MonoBehaviour, IAsteroidCollisionHandler
 {
     public event Action Died;
     
@@ -38,16 +38,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IBulletCollision
     {
         Destroy();
     }
-
-    public void OnCollisionBullet(Bullet bullet, Action onCollisionSuccessful)
-    {
-        if(bullet.Type == BulletType.Ufo)
-        {
-            onCollisionSuccessful?.Invoke();
-
-            Destroy();
-        }
-    }
+    
     
     public void Accelerate()
     {

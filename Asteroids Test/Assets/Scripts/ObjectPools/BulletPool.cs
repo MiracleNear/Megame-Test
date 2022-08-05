@@ -1,15 +1,8 @@
-﻿using Factories;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace ObjectPools
 {
-    public class BulletPool : ObjectPool<Bullet>
+    public class BulletPool : ObjectPool<Transform>
     {
-        [SerializeField] private BulletFactory _bulletFactory;
-
-        public void Get()
-        {
-            
-        }
     }
 }
