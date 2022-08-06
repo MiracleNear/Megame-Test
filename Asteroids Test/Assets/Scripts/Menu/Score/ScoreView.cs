@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace DefaultNamespace.Score
+namespace Score
 {
     [RequireComponent(typeof(Text))]
     public class ScoreView : MonoBehaviour

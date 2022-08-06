@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using CollisionInterface;
+using UnityEngine;
 
 namespace Enemies
 {

@@ -1,5 +1,4 @@
-﻿using DefaultNamespace.Weapon;
-using ObjectPools;
+﻿using ObjectPools;
 using UnityEngine;
 
 namespace Factories
@@ -9,7 +8,7 @@ namespace Factories
     {
         protected override void InitFactory()
         {
-            _bulletPool = GetComponent<UfoBulletPool>();
+            BulletPool = GetComponent<UfoBulletPool>();
         }
 
         protected override UfoBullet Init(UfoBullet bullet)

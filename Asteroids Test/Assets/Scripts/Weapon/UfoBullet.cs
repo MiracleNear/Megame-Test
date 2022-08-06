@@ -1,15 +1,17 @@
-﻿using UnityEngine;
+﻿using CollisionInterface;
+using UnityEngine;
 
-namespace DefaultNamespace.Weapon
+public class UfoBullet : Bullet
 {
-    public class UfoBullet : Bullet
+    protected override bool TryCollisionWith(GameObject gameObject)
     {
-        protected override void OnCollisionEnter2D(Collision2D other)
+        if (gameObject.TryGetComponent(out IUfoBulletCollisionHandler bulletCollisionHandler))
         {
-            if (other.gameObject.TryGetComponent(out Player player))
-            {
-                
-            }
+            bulletCollisionHandler.OnCollisionUfoBullet();
+            return true;
         }
+
+        return false;
     }
+        
 }

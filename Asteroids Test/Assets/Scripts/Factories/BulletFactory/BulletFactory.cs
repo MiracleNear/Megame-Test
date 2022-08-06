@@ -5,25 +5,27 @@ namespace Factories
 {
     public abstract class BulletFactory<T> : MonoBehaviour, IBulletFactory where T : Bullet 
     {
-        protected IObjectPool<T> _bulletPool;
+        protected IObjectPool<T> BulletPool;
 
         private void Awake()
         {
             InitFactory();
         }
 
-        public void Create(Vector2 position, Vector3 direction, Color color)
+        public void Create(Vector2 position, Vector3 direction)
         {
-            Bullet bulletElement = _bulletPool.GetFreeElement();
+            Bullet bulletElement = BulletPool.GetFreeElement();
 
             bulletElement.OriginFactory = this;
 
-            bulletElement.Init(position, direction, color);
+            Init((T) bulletElement);
+            
+            bulletElement.Init(position, direction);
         }
         
         public void Reclaim(Bullet bullet)
         {
-            _bulletPool.ReturnToPool(bullet as T);
+            BulletPool.ReturnToPool(bullet as T);
         }
 
         protected abstract void InitFactory();

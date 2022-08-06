@@ -1,24 +1,25 @@
 ﻿using System;
-using Enemies;
+using CollisionInterface;
 using UnityEngine;
 
-namespace DefaultNamespace.Weapon
+public class PlayerBullet : Bullet
 {
-    public class PlayerBullet : Bullet
-    {
-        private Action<int> _enemyHit;
+    private Action<int> _enemyHit;
 
-        public void Init(Action<int> EnemyHit)
-        {
-            _enemyHit = EnemyHit;
-        }
-        
-        protected override void OnCollisionEnter2D(Collision2D other)
-        {
-            if (other.gameObject.TryGetComponent(out Enemy enemy))
-            {
-                _enemyHit?.Invoke(enemy.Points);
-            }
-        }
+    public void Init(Action<int> EnemyHit)
+    {
+        _enemyHit = EnemyHit;
     }
+
+    protected override bool TryCollisionWith(GameObject gameObject)
+    {
+        if (gameObject.TryGetComponent(out IPlayerBulletCollisionHandler bulletCollisionHandler))
+        {
+            bulletCollisionHandler.OnCollisionPlayerBullet(_enemyHit);
+            return true;
+        }
+
+        return false;
+    }
+        
 }

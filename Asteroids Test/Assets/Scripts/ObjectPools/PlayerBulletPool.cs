@@ -1,6 +1,4 @@
-﻿using DefaultNamespace.Weapon;
-
-namespace ObjectPools
+﻿namespace ObjectPools
 {
     public class PlayerBulletPool : ObjectPool<PlayerBullet>
     {

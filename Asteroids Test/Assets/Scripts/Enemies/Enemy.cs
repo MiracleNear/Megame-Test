@@ -1,4 +1,5 @@
 ﻿using System;
+using CollisionInterface;
 using DefaultNamespace.Audio;
 using Detectors;
 using Factories;
@@ -8,17 +9,17 @@ using Random = UnityEngine.Random;
 namespace Enemies
 {
     [RequireComponent(typeof(GameZoneOutBoundsDetector))]
-    public abstract class Enemy : MonoBehaviour
+    public abstract class Enemy : MonoBehaviour, IPlayerBulletCollisionHandler
     {
         public event Action<Enemy> Died;
         public EnemyType Type { get; private set; }
         public Vector3 Direction { get; set; }
-        public int Points { get; private set; }
-        
+
         [SerializeField] private ExplosionSFX _explosionSfx;
         
         private float _speed;
         private AudioClip _deathSound;
+        private int _points;
 
         public void Init(EnemyConfig enemyConfig, EnemyType type)
         {
@@ -26,9 +27,14 @@ namespace Enemies
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
             _deathSound = enemyConfig.DeathSound;
             transform.localScale = enemyConfig.Scale;
-            Points = enemyConfig.Points;
+            _points = enemyConfig.Points;
         }
-        
+
+        public virtual void OnCollisionPlayerBullet(Action<int> action)
+        {
+            action.Invoke(_points);
+            DestroySelf();
+        }
         
         protected void Move()
         {
@@ -42,10 +48,9 @@ namespace Enemies
             PlaySoundDeath();
 		}
 
-        protected void PlaySoundDeath()
+        private void PlaySoundDeath()
         {
             Instantiate(_explosionSfx).Init(_deathSound);
         }
-        
     }
 }

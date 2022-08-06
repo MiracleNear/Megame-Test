@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace.Tween
+namespace Extensions
 {
     public static class SpriteRendererExtension
     {

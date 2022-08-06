@@ -1,6 +1,5 @@
-﻿using DefaultNamespace.Score;
-using DefaultNamespace.Weapon;
-using ObjectPools;
+﻿using ObjectPools;
+using Score;
 using UnityEngine;
 
 namespace Factories
@@ -12,7 +11,7 @@ namespace Factories
         
         protected override void InitFactory()
         {
-            _bulletPool = GetComponent<PlayerBulletPool>();
+            BulletPool = GetComponent<PlayerBulletPool>();
         }
 
         protected override PlayerBullet Init(PlayerBullet bullet)

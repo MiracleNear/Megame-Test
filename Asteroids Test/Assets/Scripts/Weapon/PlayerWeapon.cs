@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Factories;
+using UnityEngine;
 
 public class PlayerWeapon : Weapon
 {
@@ -15,6 +16,8 @@ public class PlayerWeapon : Weapon
 
     protected override void Init()
     {
+        BulletFactory = FindObjectOfType<PlayerBulletFactory>();
+        
         _intervalBetweenShot = (1f / _numberOfBulletsPerSecond);
     }
 }

@@ -2,7 +2,6 @@
 using Factories;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
 public abstract class Bullet : MonoBehaviour
 {
     public IBulletFactory OriginFactory { get; set; }
@@ -12,26 +11,19 @@ public abstract class Bullet : MonoBehaviour
     private Vector3 _direction;
     private float _maxDistance;
     private float _distanceTraveled;
-    private SpriteRenderer _spriteRenderer;
 
-	private void Awake()
-	{
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-	}
-
-	private void Start()
+    private void Start()
     {
         _maxDistance = ScreenBoundSize.Size.x;
     }
 
-    public void Init(Vector2 position, Vector3 direction, Color color)
+    public void Init(Vector2 position, Vector3 direction)
     {
         _direction = direction;
         transform.position = position;
-        _spriteRenderer.color = color;
     }
 
-    protected abstract void OnCollisionEnter2D(Collision2D other);
+    protected abstract bool TryCollisionWith(GameObject gameObject);
 
     private void Update()
     {
@@ -44,7 +36,7 @@ public abstract class Bullet : MonoBehaviour
         
         if (_distanceTraveled >= _maxDistance)
         {
-            Dispose();
+            Destroy();
             return;
         }
 
@@ -52,7 +44,15 @@ public abstract class Bullet : MonoBehaviour
         _distanceTraveled += deltaMove;
     }
 
-    private void Dispose()
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (TryCollisionWith(other.gameObject))
+        {
+            Destroy();
+        }
+    }
+
+    private void Destroy()
     {
         _distanceTraveled = 0f;
             

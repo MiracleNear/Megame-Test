@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 58167443}
   - component: {fileID: 58167442}
   m_Layer: 0
-  m_Name: Bullet Factory
+  m_Name: Player Bullet Factory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,9 +164,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 58167440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e1030e836506485a8b0cb59c1d957254, type: 3}
+  m_Script: {fileID: 11500000, guid: f4f5210d625a447ca837f04b99cc90c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _scoreCounter: {fileID: 1724425312}
 --- !u!114 &58167443
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,13 +177,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 58167440}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d498ef8c2feb45b895842d6535fb3335, type: 3}
+  m_Script: {fileID: 11500000, guid: bfbbfee6eed44f3f88a6b44bb5c40520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _baseCapacity: 16
   _additionCapacity: 16
-  _template: {fileID: 2711477289845642208, guid: acd0d070e12d6654cab3aecb84995d0f, type: 3}
-  _bulletFactory: {fileID: 0}
+  _template: {fileID: 8567338988934362842, guid: acd0d070e12d6654cab3aecb84995d0f, type: 3}
 --- !u!1 &155743942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,6 +1503,65 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &957993897
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 957993898}
+  - component: {fileID: 957993900}
+  - component: {fileID: 957993899}
+  m_Layer: 0
+  m_Name: Ufo Bullet Factory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &957993898
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957993897}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2100966129}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &957993899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957993897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0ef942dc70a4a23968d6e45284746da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &957993900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 957993897}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfda27e303048fc8fc570e68d8b0651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _baseCapacity: 16
+  _additionCapacity: 16
+  _template: {fileID: 3316468553661752075, guid: df08ecf6dfe9e574884ffd770f4cfe55, type: 3}
 --- !u!1 &1097910068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1825,7 +1884,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd044d77159846c7a8ac6311ad7e9f38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyPublisher: {fileID: 269610335}
   _gameStarter: {fileID: 199135227}
 --- !u!114 &1724425313
 MonoBehaviour:
@@ -2248,6 +2306,7 @@ Transform:
   - {fileID: 58167441}
   - {fileID: 355272751}
   - {fileID: 475290438}
+  - {fileID: 957993898}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

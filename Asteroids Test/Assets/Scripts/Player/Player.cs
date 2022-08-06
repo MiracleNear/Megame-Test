@@ -1,13 +1,13 @@
 ﻿using System;
+using CollisionInterface;
 using DefaultNamespace.Audio;
 using DefaultNamespace.GameSession;
-using Factories;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerWeapon))]
 [RequireComponent(typeof(Invulnerability))]
 [RequireComponent(typeof(AudioSource))]
-public class Player : MonoBehaviour, IAsteroidCollisionHandler
+public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollisionHandler
 {
     public event Action Died;
     
@@ -38,8 +38,13 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler
     {
         Destroy();
     }
-    
-    
+
+    public void OnCollisionUfoBullet()
+    {
+        Destroy();
+    }
+
+
     public void Accelerate()
     {
         _acceleration = _acceleration + transform.up * (_speedPerSecond * Time.deltaTime);
@@ -64,7 +69,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler
             _playerWeapon.Shoot(transform.up);
         }
     }
-    
+
     public void Move()
     {
         transform.position += _acceleration * Time.deltaTime;
