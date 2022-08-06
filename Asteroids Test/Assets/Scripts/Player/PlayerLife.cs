@@ -4,15 +4,13 @@
 public class PlayerLife : MonoBehaviour
 {
     [SerializeField] private int _amount;
-    [SerializeField] private GameStarter _gameStarter;
-    
+
     private PlayerLifeView _playerLifeView;
 
     private void Awake()
     {
         _playerLifeView = GetComponent<PlayerLifeView>();
-        _gameStarter.GameLaunched += OnGameLaunched;
-        
+
         gameObject.SetActive(false);
     }
 

@@ -51,7 +51,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollis
 
         _acceleration = Vector2.ClampMagnitude(_acceleration, _maxSpeed);
 
-        if (!_acclerationSoundSource.isPlaying && !SceneContext.Instance.PauseManager.IsPaused)
+        if (!_acclerationSoundSource.isPlaying)
         {
             _acclerationSoundSource.Play();
         }

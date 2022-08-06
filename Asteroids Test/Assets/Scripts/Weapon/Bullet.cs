@@ -25,12 +25,10 @@ public abstract class Bullet : MonoBehaviour
 
     protected abstract bool TryCollisionWith(GameObject gameObject);
 
-    private void Update()
-    {
-        TryMove(_direction);
-    }
+   
+    
 
-    private void TryMove(Vector3 direction)
+    private void TryMove()
     {
         float deltaMove = _unitPerSecond * Time.deltaTime;
         
@@ -40,7 +38,7 @@ public abstract class Bullet : MonoBehaviour
             return;
         }
 
-        transform.position += direction * deltaMove;
+        transform.position += _direction * deltaMove;
         _distanceTraveled += deltaMove;
     }
 

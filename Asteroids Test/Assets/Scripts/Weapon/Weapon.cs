@@ -30,11 +30,7 @@ public abstract class Weapon : MonoBehaviour
 
     public bool CanShoot()
     {
-        if (SceneContext.Instance.PauseManager.IsPaused)
-        {
-            return false;
-        }
-
+        
         if (Time.time - _timePreviousShot <= _shotWatingTime)
         {
             return false;

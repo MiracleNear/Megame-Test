@@ -5,8 +5,7 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour
 {
     public event Action PauseButtonPressed;
-
-    [SerializeField] private GameStarter _gameStarter;
+    
     [SerializeField] private PlayerSpawner _playerSpawner;
     
     private Player _player;
@@ -34,8 +33,7 @@ public class InputHandler : MonoBehaviour
 
     private void Update()
     {
-        if(!_gameStarter.IsGameStarted) return;
-        
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             PauseButtonPressed?.Invoke();

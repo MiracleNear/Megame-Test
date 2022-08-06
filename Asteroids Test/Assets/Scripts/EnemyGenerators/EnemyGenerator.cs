@@ -7,7 +7,6 @@ using UnityEngine;
 public class EnemyGenerator<T> : MonoBehaviour where T : Enemy
 {
     [SerializeField] private EnemyFactory<T> _enemyFactory;
-    [SerializeField] private EnemyPublisher _enemyPublisher;
 
     private Action<T> _removed;
     
@@ -39,7 +38,6 @@ public class EnemyGenerator<T> : MonoBehaviour where T : Enemy
     private void SendEnemy(T enemy)
     {
         enemy.Died += OnDied;
-        _enemyPublisher.Publish(enemy);
     }
 
     private void OnDied(Enemy enemy)
@@ -50,7 +48,6 @@ public class EnemyGenerator<T> : MonoBehaviour where T : Enemy
     private void DestroyEnemy(T enemy)
     {
         enemy.Died -= OnDied;
-        _enemyPublisher.Remove(enemy);
         _removed.Invoke(enemy);
         _enemyFactory.Reclaim(enemy);
     }

@@ -8,8 +8,7 @@ namespace Spawner
     public abstract class EnemySpawner<T> : MonoBehaviour, IEnemySpawner where T : Enemy
     {
         [SerializeField] private EnemyGenerator<T> _enemyGenerator;
-        [SerializeField] private GameStarter _gameStarter;
-        
+
         protected IEnemyPlacer EnemyPlacer;
 
         private void OnEnable()
@@ -35,12 +34,12 @@ namespace Spawner
 
         protected virtual void SubScribe()
         {
-            _gameStarter.GameLaunched += OnGameLaunched;
+            
         }
 
         protected virtual void UnSubscribe()
         {
-            _gameStarter.GameLaunched -= OnGameLaunched;
+            
         }
         
         protected abstract void OnDestroyEnemy(T enemy);
