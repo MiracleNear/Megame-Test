@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 
-public class MouseInput : IInput
+public class MouseAndKeyboardInput : IInput
 {
+    public string Name { get; private set; }
     private Camera _mainCamera => Camera.main;
-
-    public string Name { get; private set; } = "Mouse and Keyboard Input";
+    
+    public MouseAndKeyboardInput(string name)
+    {
+        Name = name;
+    }
 
     public void Update(Player player)
     {

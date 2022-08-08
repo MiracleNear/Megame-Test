@@ -28,15 +28,13 @@ namespace Enemies
         {
             DestroySelf();
         }
-        
-        private void Update()
-        {
-            Move();
 
+        protected override void Shot()
+        {
             if (_target != null && _ufoWeapon.CanShoot())
             {
                 _ufoWeapon.Shoot((_target.position - transform.position).normalized);
             }
         }
-	}
+    }
 }

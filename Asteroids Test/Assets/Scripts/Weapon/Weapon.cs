@@ -30,7 +30,6 @@ public abstract class Weapon : MonoBehaviour
 
     public bool CanShoot()
     {
-        
         if (Time.time - _timePreviousShot <= _shotWatingTime)
         {
             return false;

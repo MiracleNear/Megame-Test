@@ -1,15 +1,21 @@
-﻿using System;
+﻿using GameSession;
 using Spawner;
 using UnityEngine;
 
-public class InputHandler : MonoBehaviour
+public class InputHandler : MonoBehaviour, IGameStartListener
 {
-    public event Action PauseButtonPressed;
-    
     [SerializeField] private PlayerSpawner _playerSpawner;
     
     private Player _player;
     private IInput _input;
+    private bool _isCanHandleInput;
+    private bool _isPlayerNotNull => _player != null;
+    private bool _isPaused => PauseManager.GetInstance().IsPaused;
+    
+    private void Awake()
+    {
+        EventBus.Subscribe<IGameStartListener>(this);
+    }
 
     private void OnEnable()
     {
@@ -20,6 +26,17 @@ public class InputHandler : MonoBehaviour
     {
         _playerSpawner.Spawned -= BindPlayer;
     }
+
+    private void OnDestroy()
+    {
+        EventBus.UnSubscribe<IGameStartListener>(this);
+    }
+
+    public void OnStartGame()
+    {
+        _isCanHandleInput = true;
+    }
+    
 
     public void SetInput(IInput input)
     {
@@ -33,13 +50,14 @@ public class InputHandler : MonoBehaviour
 
     private void Update()
     {
-
+        if(!_isCanHandleInput) return;
+        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            PauseButtonPressed?.Invoke();
+            EventBus.Send<IPauseButtonClickListener>(listener => listener.OnClickPauseButton());
         }
 
-        if (_player != null)
+        if (_isPlayerNotNull && !_isPaused)
         {
             _input.Update(_player);
 

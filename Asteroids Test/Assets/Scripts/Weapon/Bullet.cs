@@ -1,5 +1,7 @@
-﻿using DefaultNamespace;
+﻿using System;
+using DefaultNamespace;
 using Factories;
+using GameSession;
 using UnityEngine;
 
 public abstract class Bullet : MonoBehaviour
@@ -11,11 +13,14 @@ public abstract class Bullet : MonoBehaviour
     private Vector3 _direction;
     private float _maxDistance;
     private float _distanceTraveled;
+    private bool _isPaused => PauseManager.GetInstance().IsPaused;
 
+    
     private void Start()
     {
         _maxDistance = ScreenBoundSize.Size.x;
     }
+    
 
     public void Init(Vector2 position, Vector3 direction)
     {
@@ -23,10 +28,17 @@ public abstract class Bullet : MonoBehaviour
         transform.position = position;
     }
 
+
+
     protected abstract bool TryCollisionWith(GameObject gameObject);
 
-   
-    
+
+    private void Update()
+    {
+        if(_isPaused) return;
+        
+        TryMove();
+    }
 
     private void TryMove()
     {

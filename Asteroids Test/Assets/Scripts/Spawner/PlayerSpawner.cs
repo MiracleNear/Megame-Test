@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using GameSession;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -13,7 +14,6 @@ namespace Spawner
 
         public event Action<Player> Spawned;
         
-        
         public void InitialSpawn()
         {
             SpawnPlayer();
@@ -24,18 +24,18 @@ namespace Spawner
             StartCoroutine(SpawnWithDelay());
 		}
 
-        private void SpawnPlayer()
-        {
-            Player player = Instantiate(_player, _position, quaternion.identity);
-            
-            Spawned?.Invoke(player);
-        }
-
         private IEnumerator SpawnWithDelay()
         {
             yield return new WaitForSeconds(_spawnDelayAfterDeath);
             
             SpawnPlayer();
+        }
+
+        private void SpawnPlayer()
+        {
+            Player player = Instantiate(_player, _position, quaternion.identity);
+            
+            Spawned?.Invoke(player);
         }
     }
 }

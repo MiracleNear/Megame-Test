@@ -1,7 +1,6 @@
 ﻿using System;
 using CollisionInterface;
 using DefaultNamespace.Audio;
-using DefaultNamespace.GameSession;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerWeapon))]

@@ -1,17 +1,21 @@
-﻿using UnityEngine;
+﻿using GameSession.UserInterface;
+using UnityEngine;
 
 [RequireComponent(typeof(PlayerLifeView))]
-public class PlayerLife : MonoBehaviour
+public class PlayerLife : UserInterfaceElement
 {
     [SerializeField] private int _amount;
 
     private PlayerLifeView _playerLifeView;
-
-    private void Awake()
+    
+    public override void Init()
     {
         _playerLifeView = GetComponent<PlayerLifeView>();
+    }
 
-        gameObject.SetActive(false);
+    public override void OnStartGame()
+    {
+        _playerLifeView.Display(_amount);
     }
 
     public bool TryDecrease()
@@ -26,11 +30,5 @@ public class PlayerLife : MonoBehaviour
 
         return false;
     }
-
-    private void OnGameLaunched()
-    {
-        gameObject.SetActive(true);
-        
-        _playerLifeView.Display(_amount);
-    }
+    
 }

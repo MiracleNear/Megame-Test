@@ -3,6 +3,7 @@ using CollisionInterface;
 using DefaultNamespace.Audio;
 using Detectors;
 using Factories;
+using GameSession;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -16,10 +17,20 @@ namespace Enemies
         public Vector3 Direction { get; set; }
 
         [SerializeField] private ExplosionSFX _explosionSfx;
-        
+
+        private bool _isPaused => PauseManager.GetInstance().IsPaused;
         private float _speed;
         private AudioClip _deathSound;
         private int _points;
+        
+
+        private void Update()
+        {
+            if(_isPaused) return;
+            
+            Move();
+            Shot();
+        }
 
         public void Init(EnemyConfig enemyConfig, EnemyType type)
         {
@@ -36,11 +47,6 @@ namespace Enemies
             DestroySelf();
         }
         
-        protected void Move()
-        {
-            transform.position = transform.position + Direction * (_speed * Time.deltaTime);
-        }
-
 
         protected void DestroySelf()
 		{
@@ -48,9 +54,20 @@ namespace Enemies
             PlaySoundDeath();
 		}
 
+        protected virtual void Shot()
+        {
+            
+        }
+
         private void PlaySoundDeath()
         {
             Instantiate(_explosionSfx).Init(_deathSound);
         }
+
+        private void Move()
+        {
+            transform.position = transform.position + Direction * (_speed * Time.deltaTime);
+        }
+        
     }
 }

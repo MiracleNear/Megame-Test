@@ -1,50 +1,52 @@
-﻿using UnityEngine;
+﻿using System;
+using DefaultNamespace.Factories.InputFactory;
+using DefaultNamespace.Input;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace DefaultNamespace.GameSession
 {
     public class SelectorInput : MonoBehaviour
     {
+        public InputType SelectedInput { get; private set; }
+        
         [SerializeField] private Text _view;
-        [SerializeField] private Button _switcherInput;
         [SerializeField] private InputHandler _inputHandler;
+        [SerializeField] private InputType _defaultInput;
+        [SerializeField] private InputFactory _inputFactory;
 
-        private IInput[] _inputs = new IInput[] {new KeyboardInput(), new MouseInput()};
-        
-        private IInput _currentInput;
-        
-        private int _indexCurrentInput;
+        private InputType[] _availableInputs;
 
         private void Awake()
         {
-            _currentInput = _inputs[_indexCurrentInput];
-            
-            _inputHandler.SetInput(_currentInput);
-            
-            Display(_inputs[_indexCurrentInput]);
+            _availableInputs = _inputFactory.GetTypesInput();
         }
 
-        private void OnEnable()
+        public void SetDefaultInput()
         {
-            _switcherInput.onClick.AddListener(SwitchInput);
+            SetInput(_defaultInput);
         }
-
-        private void OnDisable()
+        
+        public void SwitchInput()
         {
-            _switcherInput.onClick.AddListener(SwitchInput);
+            int indexCurrentInput = (int) SelectedInput;
+
+            int indexNextInput = (indexCurrentInput + 1) % _availableInputs.Length;
+
+            SetInput(_availableInputs[indexNextInput]);
         }
 
-        private void SwitchInput()
+        public void SetInput(InputType inputType)
         {
-            _indexCurrentInput = (_indexCurrentInput + 1) % _inputs.Length;
+            SelectedInput = inputType;
             
-            _currentInput = _inputs[_indexCurrentInput];
+            IInput input = _inputFactory.Get(inputType);
             
-            _inputHandler.SetInput(_currentInput);
+            _inputHandler.SetInput(input);
             
-            Display(_currentInput);
+            Display(input);
         }
-
+        
         private void Display(IInput input)
         {
             _view.text = input.Name;

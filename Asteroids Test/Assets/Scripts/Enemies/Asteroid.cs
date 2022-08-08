@@ -49,11 +49,6 @@ namespace Enemies
             }
         }
         
-        private void Update()
-        {
-            Move();
-        }
-
         private void OnCollisionEnter2D(Collision2D other)
         { 
             if (other.gameObject.TryGetComponent(out IAsteroidCollisionHandler handler))

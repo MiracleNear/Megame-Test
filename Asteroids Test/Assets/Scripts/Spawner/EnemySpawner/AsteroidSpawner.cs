@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Enemies;
 using Factories;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace Spawner
         [SerializeField] private int _startAmount;
         
         private List<Asteroid> _activeAsteroids = new List<Asteroid>();
-
+        
         public override void InitialSpawn()
         {
             Spawn();

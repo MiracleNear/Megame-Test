@@ -2,7 +2,12 @@ using UnityEngine;
 
 public class KeyboardInput : IInput
 {
-    public string Name { get; private set; } = "Keyboard Input";
+    public string Name { get; private set; }
+
+    public KeyboardInput(string name)
+    {
+        Name = name;
+    }
 
     public void Update(Player player)
     {
