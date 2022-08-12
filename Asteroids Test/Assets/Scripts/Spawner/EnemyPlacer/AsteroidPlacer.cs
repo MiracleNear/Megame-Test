@@ -1,6 +1,4 @@
 ﻿using DefaultNamespace;
-using Enemies;
-using Factories;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,19 +6,13 @@ namespace Spawner
 {
 	public class AsteroidPlacer : IEnemyPlacer
 	{
-        private float _minHorizontalPosition, _maxHorizontalPosition;
-        private float _minVerticalPosition, _maxVerticalPosition;
+        private Collider2D _asteroidCollider;
+        private float _baseHorizontalPosition => ScreenBoundSize.HalfSize.x;
+        private float _baseVerticalPosition => ScreenBoundSize.HalfSize.y;
 
         public AsteroidPlacer(Collider2D asteroidCollider)
         {
-            _maxHorizontalPosition = ScreenBoundSize.HalfSize.x + asteroidCollider.bounds.size.x;
-            _maxVerticalPosition = ScreenBoundSize.HalfSize.y + asteroidCollider.bounds.size.y;
-            
-            Debug.DrawLine(Vector3.zero, new Vector3(_maxHorizontalPosition, 0f), Color.red, 5f);
-            Debug.DrawLine(Vector3.zero, new Vector3(0f, _maxVerticalPosition), Color.red, 5f);
-            
-            _minHorizontalPosition = -_maxHorizontalPosition;
-            _minVerticalPosition = -_maxVerticalPosition;
+            _asteroidCollider = asteroidCollider;
         }
 
         public Vector2 GetPosition()
@@ -28,7 +20,7 @@ namespace Spawner
             return GetRandomPosition();
         }
 
-        public  Vector2 GetDirectionFrom(Vector2 position)
+        public Vector2 GetDirectionFrom(Vector2 position)
         {
             return (Random.insideUnitCircle - position).normalized;
         }
@@ -40,20 +32,26 @@ namespace Spawner
 
         private Vector2 GetRandomVerticalPosition()
         {
-            float randomVerticalPosition = Random.Range(_minVerticalPosition, _maxVerticalPosition);
-    
-            return Random.value >= 0.5f
-                ? new Vector2(_maxHorizontalPosition, randomVerticalPosition)
-                : new Vector2(_minHorizontalPosition, randomVerticalPosition);
+            Vector2 Vector = new Vector2(GetRandomOffsetPosition(_baseHorizontalPosition, _asteroidCollider.bounds.size.x), 
+                Random.Range(-_baseVerticalPosition, _baseVerticalPosition));
+            
+            return Vector;
         }
-
+        
         private Vector2 GetRandomHorizontalPosition()
+        { 
+            Vector2 Vector = new Vector2(Random.Range(-_baseHorizontalPosition, _baseHorizontalPosition), 
+                GetRandomOffsetPosition(_baseVerticalPosition, _asteroidCollider.bounds.size.y));
+            
+            return Vector;
+        }
+        
+        private float GetRandomOffsetPosition(float position, float offset)
         {
-            float randomHorizontalPosition = Random.Range(_minHorizontalPosition, _maxHorizontalPosition);
-
-            return Random.value >= 0.5f
-                ? new Vector2(randomHorizontalPosition, _maxVerticalPosition)
-                : new Vector2(randomHorizontalPosition, _minVerticalPosition);
+            float sign = Random.value >= 0.5f ? 1f : -1f;
+            
+            
+            return position + sign * offset;
         }
     }
 }

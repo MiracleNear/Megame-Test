@@ -6,23 +6,30 @@ using UnityEngine;
 
 namespace Enemies
 {
-    [RequireComponent(typeof(AsteroidPartPlacerFactory))]
     public class Asteroid : Enemy, IUfoBulletCollisionHandler
     {
-        private bool _isInit;
-
         private AsteroidSpawner _asteroidSpawner;
-        private IEnemyPlacer _asteroidPartPlacer;
-
-        public void Init(AsteroidSpawner asteroidSpawner)
+        private AsteroidType _asteroidType;
+        
+        public void Init(AsteroidSpawner asteroidSpawner, AsteroidType asteroidType)
         {
-            if (!_isInit)
-            {
-                _asteroidSpawner = asteroidSpawner;
-                _asteroidPartPlacer = GetComponent<AsteroidPartPlacerFactory>().Get();
-            }
+            _asteroidSpawner = asteroidSpawner;
+            _asteroidType = asteroidType;
         }
 
+        public bool TryBreakAsteroid(out EnemyType nextPartAsteroid)
+        {
+            nextPartAsteroid = default;
+
+            if (!_asteroidType.IsPrimitive)
+            {
+                nextPartAsteroid = _asteroidType.NextPartAsteroid;
+                return true;
+            }
+
+            return false;
+        }
+        
         public override void OnCollisionPlayerBullet(Action<int> action)
         {
             CreatePartsAsteroid();
@@ -39,14 +46,7 @@ namespace Enemies
 
         private void CreatePartsAsteroid()
         {
-            if (Type == EnemyType.LargeAsteroid)
-            {
-                _asteroidSpawner.SpawnPartAsteroids(EnemyType.MediumAsteroid, _asteroidPartPlacer, 2);
-            }
-            else if (Type == EnemyType.MediumAsteroid)
-            {
-                _asteroidSpawner.SpawnPartAsteroids(EnemyType.SmallAsteroid, _asteroidPartPlacer, 2);
-            }
+            _asteroidSpawner.SpawnPartAsteroidsFor(this);
         }
         
         private void OnCollisionEnter2D(Collision2D other)

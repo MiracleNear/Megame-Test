@@ -1,5 +1,6 @@
 ﻿using CollisionInterface;
 using UnityEngine;
+using WeaponSystem;
 
 namespace Enemies
 {

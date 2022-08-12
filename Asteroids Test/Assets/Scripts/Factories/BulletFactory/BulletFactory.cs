@@ -1,9 +1,10 @@
 ﻿using ObjectPools;
 using UnityEngine;
+using WeaponSystem;
 
 namespace Factories
 {
-    public abstract class BulletFactory<T> : MonoBehaviour, IBulletFactory where T : Bullet 
+    public abstract class BulletFactory<T> : FactoryGameElements<T>, IBulletFactory where T : Bullet
     {
         protected IObjectPool<T> BulletPool;
 
@@ -16,20 +17,22 @@ namespace Factories
         {
             Bullet bulletElement = BulletPool.GetFreeElement();
 
-            bulletElement.OriginFactory = this;
+            bulletElement.RecyclerFactoryGameElements = this;
 
             Init((T) bulletElement);
             
             bulletElement.Init(position, direction);
         }
-        
-        public void Reclaim(Bullet bullet)
+
+        protected override void Reclaim(T element)
         {
-            BulletPool.ReturnToPool(bullet as T);
+            BulletPool.ReturnToPool(element);
         }
+
 
         protected abstract void InitFactory();
 
         protected abstract T Init(T bullet);
+        
     }
 }

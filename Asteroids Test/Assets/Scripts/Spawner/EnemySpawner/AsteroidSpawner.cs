@@ -1,43 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Enemies;
 using Factories;
+using GameSession;
 using UnityEngine;
 
 namespace Spawner
 {
-    [RequireComponent(typeof(AsteroidPlacerFactory))]
-    public class AsteroidSpawner : EnemySpawner<Asteroid>
+    public class AsteroidSpawner : EnemySpawner<Asteroid>, IGameStartListener
     {
         [SerializeField] private int _startAmount;
+        [SerializeField] private int _asteroidPartCount;
+        [SerializeField] private Collider2D _asteroidCollider;
+        [SerializeField] private float _yawAngle;
+        [SerializeField] private List<Asteroid> _activeAsteroids = new List<Asteroid>();
         
-        private List<Asteroid> _activeAsteroids = new List<Asteroid>();
-        
-        public override void InitialSpawn()
+        public void OnStartGame()
         {
             Spawn();
         }
 
-        public void SpawnPartAsteroids(EnemyType asteroidPartType, IEnemyPlacer asteroidPartPlacer, int count)
+        public void SpawnPartAsteroidsFor(Asteroid asteroid)
         {
-            CreateAsteroids(asteroidPartType, asteroidPartPlacer, count);
+            if (asteroid.TryBreakAsteroid(out EnemyType nextPartAsteroid))
+            {
+                CreateAsteroids(nextPartAsteroid, new AsteroidPartPlacer(asteroid, _yawAngle), _asteroidPartCount);
+            }
         }
 
-        protected override void OnDestroyEnemy(Asteroid asteroid)
+        protected override void SubScribe()
+        {
+            EventBus.Subscribe<IGameStartListener>(this);
+            base.SubScribe();
+        }
+
+        protected override void UnSubscribe()
+        {
+            EventBus.UnSubscribe<IGameStartListener>(this);
+            base.UnSubscribe();
+        }
+
+        protected override void OnReclaimed(Asteroid asteroid)
         {
             _activeAsteroids.Remove(asteroid);
 
             if (_activeAsteroids.Count == 0)
             {
                 _startAmount++;
-                
                 Spawn();
             }
         }
 
         private void Spawn()
         {
-            CreateAsteroids(EnemyType.LargeAsteroid, EnemyPlacer, _startAmount);
+            CreateAsteroids(EnemyType.LargeAsteroid, EnemyPlacer.CreateAsteroidPlacer(_asteroidCollider), _startAmount);
         }
 
         private void CreateAsteroids(EnemyType asteroidType, IEnemyPlacer enemyPlacer, int count)
@@ -45,7 +60,7 @@ namespace Spawner
             for (int i = 0; i < count; i++)
             {
                 Asteroid asteroid = Create(asteroidType, enemyPlacer);
-                
+
                 _activeAsteroids.Add(asteroid);
             }
         }

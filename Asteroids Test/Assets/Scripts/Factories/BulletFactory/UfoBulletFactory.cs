@@ -1,5 +1,6 @@
 ﻿using ObjectPools;
 using UnityEngine;
+using WeaponSystem;
 
 namespace Factories
 {

@@ -8,12 +8,15 @@ namespace Factories
     {
         [SerializeField] private EnemyConfig _ufoConfig;
         [SerializeField] private Ufo _template;
-        public override void Reclaim(Ufo enemy)
-        {
-            Destroy(enemy.gameObject);
-        }
 
-        protected override Ufo GetInstance()
+        protected override void Reclaim(Ufo element)
+        {
+            base.Reclaim(element);
+            Destroy(element.gameObject);
+        }
+        
+
+        protected override Ufo GetInstance(EnemyType enemyType)
         {
             return Instantiate(_template);
         }
@@ -28,5 +31,6 @@ namespace Factories
                     throw new Exception("no such template");
             }
         }
+        
     }
 }

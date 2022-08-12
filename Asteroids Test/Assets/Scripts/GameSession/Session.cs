@@ -1,4 +1,4 @@
-﻿using DefaultNamespace.Input;
+﻿using InputSystem;
 using UnityEngine;
 
 namespace GameSession

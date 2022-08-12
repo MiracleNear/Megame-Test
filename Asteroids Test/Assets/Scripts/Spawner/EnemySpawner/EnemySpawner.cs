@@ -1,22 +1,13 @@
-﻿using System;
-using Enemies;
+﻿using Enemies;
 using Factories;
-using GameSession;
 using UnityEngine;
 
 namespace Spawner
 {
-    public abstract class EnemySpawner<T> : MonoBehaviour,  IGameStartListener, IEnemySpawner where T : Enemy
+    public abstract class EnemySpawner<T> : MonoBehaviour where T : Enemy
     {
-        [SerializeField] private EnemyGenerator<T> _enemyGenerator;
-
-        protected IEnemyPlacer EnemyPlacer;
-
-        private void Awake()
-        {
-            EventBus.Subscribe<IGameStartListener>(this);
-        }
-
+        [SerializeField] private EnemyFactory<T> _enemyFactory;
+        
         private void OnEnable()
         {
             SubScribe();
@@ -26,46 +17,25 @@ namespace Spawner
         {
             UnSubscribe();
         }
-
-        private void OnDestroy()
-        {
-            EventBus.UnSubscribe<IGameStartListener>(this);
-        }
-
-        public void Init()
-        {
-            _enemyGenerator.Init(OnDestroyEnemy);
-            EnemyPlacer = GetComponent<EnemyPlacerFactory>().Get();
-        }
-
-        public void OnStartGame()
-        {
-            Init();
-            InitialSpawn();
-        }
         
-
-        public virtual void InitialSpawn()
-        {
-            
-        }
-
+        
         protected virtual void SubScribe()
         {
-            
+            _enemyFactory.Reclaimed += OnReclaimed;
         }
-
+        
         protected virtual void UnSubscribe()
         {
-            
+            _enemyFactory.Reclaimed -= OnReclaimed;
         }
-
-        protected abstract void OnDestroyEnemy(T enemy);
+        
+        protected abstract void OnReclaimed(T enemy);
 
         protected T Create(EnemyType enemyType, IEnemyPlacer enemyPlacer)
         {
-            return _enemyGenerator.Create(enemyType, enemyPlacer);
+            T enemy = _enemyFactory.Get(enemyType, enemyPlacer.GetPosition(), enemyPlacer.GetDirectionFrom(enemyPlacer.GetPosition()));
+            
+            return enemy;
         }
-        
     }
 }

@@ -1,12 +1,14 @@
-﻿using System;
+﻿using GameSession;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace GameSession
+namespace Menu
 {
-    public class MainMenu : MonoBehaviour, IGameStartListener, IPauseHandler
+    public class MainMenu : MonoBehaviour, IGameStartListener, IGameOverListener, IPauseHandler
     {
         [SerializeField] private Button _resumeGame;
+        [SerializeField] private GameObject _mainScreen;
+        [SerializeField] private GameObject _gameOverScreen;
 
         private Image _resumeGameButtonView;
         private Color _resumeButtonColorOnPause;
@@ -19,6 +21,7 @@ namespace GameSession
                 _resumeGameButtonView.color.b, 1f);
             
             EventBus.Subscribe<IGameStartListener>(this);
+            EventBus.Subscribe<IGameOverListener>(this);
         }
 
         private void Start()
@@ -39,19 +42,25 @@ namespace GameSession
         private void OnDestroy()
         {
             EventBus.UnSubscribe<IGameStartListener>(this);
+            EventBus.UnSubscribe<IGameOverListener>(this);
         }
 
         public void OnStartGame()
         {
-            gameObject.SetActive(false);
+            _mainScreen.SetActive(false);
+        }
+
+        public void OnGameOver()
+        {
+            _gameOverScreen.SetActive(true);
         }
 
         public void SetPause(bool isPaused)
         {
+            _mainScreen.SetActive(isPaused);
+            
             if (isPaused)
             {
-                gameObject.SetActive(true);
-
                 if (!_resumeGame.enabled)
                 {
                     _resumeGame.enabled = true;
@@ -59,10 +68,7 @@ namespace GameSession
                     _resumeGameButtonView.color = _resumeButtonColorOnPause;
                 }
             }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+          
         }
 
         private void OnClickResumeButton()

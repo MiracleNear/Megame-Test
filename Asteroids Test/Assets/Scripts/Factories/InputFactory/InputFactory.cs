@@ -1,25 +1,20 @@
 ﻿using System;
-using DefaultNamespace.Input;
+using InputSystem;
 using UnityEngine;
 
-namespace DefaultNamespace.Factories.InputFactory
+namespace Factories
 {
     public class InputFactory : MonoBehaviour
     {
         [SerializeField] private string _keyboardControlName;
         [SerializeField] private string _mouseAndKeyboardControlName;
 
-        private InputType[] _inputTypes;
-        
-        private void Awake()
+        private InputType[] _inputTypes = new InputType[] 
         {
-            _inputTypes = new InputType[]
-            {
-                InputType.Keyboard,
-                InputType.MouseAndKeyboard,
-            };
-        }
-
+            InputType.Keyboard,
+            InputType.MouseAndKeyboard
+        };
+        
         public IInput Get(InputType inputType)
         {
             switch (inputType)

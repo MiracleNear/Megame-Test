@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace GameSession.UserInterface
+namespace Menu
 {
     public abstract class UserInterfaceElement : MonoBehaviour
     {

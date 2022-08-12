@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Score
+namespace Menu
 {
     [RequireComponent(typeof(Text))]
     public class ScoreView : MonoBehaviour

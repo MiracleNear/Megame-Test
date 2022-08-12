@@ -1,7 +1,6 @@
-﻿using GameSession.UserInterface;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Score
+namespace Menu
 {
     [RequireComponent(typeof(ScoreView))]
     public class ScoreCounter : UserInterfaceElement
@@ -24,6 +23,5 @@ namespace Score
             _points += points;
             _scoreView.UpdateScore(_points);
         }
-        
     }
 }

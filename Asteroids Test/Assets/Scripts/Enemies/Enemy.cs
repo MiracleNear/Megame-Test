@@ -12,8 +12,7 @@ namespace Enemies
     [RequireComponent(typeof(GameZoneOutBoundsDetector))]
     public abstract class Enemy : MonoBehaviour, IPlayerBulletCollisionHandler
     {
-        public event Action<Enemy> Died;
-        public EnemyType Type { get; private set; }
+        public IFactoryGameElements FactoryGameElements;
         public Vector3 Direction { get; set; }
 
         [SerializeField] private ExplosionSFX _explosionSfx;
@@ -23,7 +22,6 @@ namespace Enemies
         private AudioClip _deathSound;
         private int _points;
         
-
         private void Update()
         {
             if(_isPaused) return;
@@ -32,9 +30,8 @@ namespace Enemies
             Shot();
         }
 
-        public void Init(EnemyConfig enemyConfig, EnemyType type)
+        public void Init(EnemyConfig enemyConfig)
         {
-            Type = type;
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
             _deathSound = enemyConfig.DeathSound;
             transform.localScale = enemyConfig.Scale;
@@ -50,8 +47,8 @@ namespace Enemies
 
         protected void DestroySelf()
 		{
-            Died?.Invoke(this);
             PlaySoundDeath();
+            FactoryGameElements.Recycle(this);
 		}
 
         protected virtual void Shot()
@@ -68,6 +65,5 @@ namespace Enemies
         {
             transform.position = transform.position + Direction * (_speed * Time.deltaTime);
         }
-        
     }
 }

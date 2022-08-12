@@ -24,7 +24,8 @@ namespace Spawner
             Vector2 direction = _rotation * _asteroid.Direction;
 
             _rotation = Quaternion.Inverse(_rotation);
-
+            
+            
             return direction;
         }
     }

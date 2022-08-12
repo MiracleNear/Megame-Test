@@ -2,26 +2,29 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerLifeView : MonoBehaviour
+namespace Menu
 {
-    [SerializeField] private Image[] _images;
-
-    public void Display(int count)
+    public class PlayerLifeView : MonoBehaviour
     {
-        if (count > _images.Length)
-        {
-            throw new Exception("invalid quantity to display");
-        }
+        [SerializeField] private Image[] _images;
 
-        for (int i = 0; i < _images.Length; i++)
+        public void Display(int count)
         {
-            if (i < count)
+            if (count > _images.Length)
             {
-                _images[i].enabled = true;
+                throw new Exception("invalid quantity to display");
             }
-            else
+
+            for (int i = 0; i < _images.Length; i++)
             {
-                _images[i].enabled = false;
+                if (i < count)
+                {
+                    _images[i].enabled = true;
+                }
+                else
+                {
+                    _images[i].enabled = false;
+                }
             }
         }
     }

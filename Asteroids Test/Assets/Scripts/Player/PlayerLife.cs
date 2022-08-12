@@ -1,4 +1,4 @@
-﻿using GameSession.UserInterface;
+﻿using Menu;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerLifeView))]
@@ -30,5 +30,4 @@ public class PlayerLife : UserInterfaceElement
 
         return false;
     }
-    
 }

@@ -1,34 +1,36 @@
-﻿using System;
-using GameSession;
-using GameSession.UserInterface;
+﻿using GameSession;
 using UnityEngine;
 
-public class UserInterface : MonoBehaviour, IGameStartListener
+namespace Menu
 {
-    [SerializeField] private UserInterfaceElement[] _userInterfaceElements;
+    public class UserInterface : MonoBehaviour, IGameStartListener
+    {
+        [SerializeField] private UserInterfaceElement[] _userInterfaceElements;
     
-    private void Awake()
-    {
-        EventBus.Subscribe<IGameStartListener>(this);
+        private void Awake()
+        {
+            EventBus.Subscribe<IGameStartListener>(this);
         
-        foreach (var interfaceElement in _userInterfaceElements)
-        {
-            interfaceElement.Init();
-            interfaceElement.Hide();
+            foreach (var interfaceElement in _userInterfaceElements)
+            {
+                interfaceElement.Init();
+                interfaceElement.Hide();
+            }
         }
-    }
 
-    private void OnDestroy()
-    {
-        EventBus.UnSubscribe<IGameStartListener>(this);
-    }
-
-    public void OnStartGame()
-    {
-        foreach (var interfaceElement in _userInterfaceElements)
+        private void OnDestroy()
         {
-            interfaceElement.OnStartGame();
-            interfaceElement.Show();
+            EventBus.UnSubscribe<IGameStartListener>(this);
+        }
+
+        public void OnStartGame()
+        {
+            foreach (var interfaceElement in _userInterfaceElements)
+            {
+                interfaceElement.OnStartGame();
+                interfaceElement.Show();
+            }
         }
     }
 }
+

@@ -1,5 +1,6 @@
 ﻿using Enemies;
 using System;
+using Factories;
 using UnityEngine;
 
 namespace Factories
@@ -12,23 +13,33 @@ namespace Factories
         Ufo,
 	}
 
-    public abstract class EnemyFactory<T> : MonoBehaviour where T : Enemy
+    public abstract class EnemyFactory<T> : FactoryGameElements<T> where T : Enemy
     {
-        public T Get(EnemyType enemy)
-        {
-            EnemyConfig enemyConfig = GetConfigByType(enemy);
+	    public event Action<T> Reclaimed;
 
-            T enemyTemplate = GetInstance();
-            
-            enemyTemplate.Init(enemyConfig, enemy);
-            
-            return enemyTemplate;
-        }
+	    public T Get(EnemyType enemyType, Vector2 position, Vector2 direction)
+	    {
+		    EnemyConfig enemyConfig = GetConfigByType(enemyType);
 
-        public abstract void Reclaim(T enemy);
+		    T enemy = GetInstance(enemyType);
 
-        protected abstract T GetInstance();
+		    enemy.FactoryGameElements = this;
+		    
+		    enemy.transform.position = position;
+		    enemy.Direction = direction;
+		    
+		    enemy.Init(enemyConfig);
 
-        protected abstract EnemyConfig GetConfigByType(EnemyType enemyType);
+		    return enemy;
+	    }
+
+	    protected override void Reclaim(T element)
+	    {
+		    Reclaimed?.Invoke(element);
+	    }
+
+	    protected abstract T GetInstance(EnemyType enemyType);
+
+	    protected abstract EnemyConfig GetConfigByType(EnemyType enemyType);
     }
 }

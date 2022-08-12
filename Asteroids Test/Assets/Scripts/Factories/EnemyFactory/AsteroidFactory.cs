@@ -18,11 +18,19 @@ namespace Factories
             _asteroidsPool = GetComponent<AsteroidPool>();
         }
 
-        protected override Asteroid GetInstance()
+        protected override void Reclaim(Asteroid element)
+        {
+            base.Reclaim(element);
+            
+            _asteroidsPool.ReturnToPool(element);
+        }
+        
+
+        protected override Asteroid GetInstance(EnemyType enemyType)
         { 
             Asteroid asteroid = _asteroidsPool.GetFreeElement();
             
-            asteroid.Init(_asteroidSpawner);
+            asteroid.Init(_asteroidSpawner, AsteroidType.ConvertEnemyTypeToAsteroidType(enemyType));
 
             return asteroid;
         }
@@ -41,10 +49,5 @@ namespace Factories
                     throw new Exception("no such type");
             }
         }
-
-        public override void Reclaim(Asteroid enemy)
-        {
-            _asteroidsPool.ReturnToPool(enemy);
-        }
-	}
+    }
 }

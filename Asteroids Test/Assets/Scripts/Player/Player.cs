@@ -2,6 +2,7 @@
 using CollisionInterface;
 using DefaultNamespace.Audio;
 using UnityEngine;
+using WeaponSystem;
 
 [RequireComponent(typeof(PlayerWeapon))]
 [RequireComponent(typeof(Invulnerability))]
@@ -18,7 +19,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollis
     [SerializeField] private AudioSource _acclerationSoundSource;
     
     public Vector3 _acceleration;
-    private PlayerWeapon _playerWeapon;
+    private Weapon _playerWeapon;
     private Invulnerability _invulnerability;
 
     private void Awake()
