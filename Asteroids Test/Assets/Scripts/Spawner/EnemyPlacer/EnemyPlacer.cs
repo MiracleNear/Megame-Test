@@ -5,7 +5,7 @@ namespace Spawner
 {
     public class EnemyPlacer
     {
-        public static IEnemyPlacer CreateAsteroidPlacer(Collider2D asteroidCollider)
+        public static IEnemyPlacer CreateAsteroidPlacer(BoxCollider2D asteroidCollider)
         {
             return new AsteroidPlacer(asteroidCollider);
         }
@@ -15,7 +15,7 @@ namespace Spawner
             return new AsteroidPartPlacer(asteroid, yawAngle);
         }
 
-        public static IEnemyPlacer CreateUfoPlacer(Collider2D ufoCollider, float offsetFromTheVerticalBorderInPercent)
+        public static IEnemyPlacer CreateUfoPlacer(BoxCollider2D ufoCollider, float offsetFromTheVerticalBorderInPercent)
         {
             return new UfoPlacer(ufoCollider, offsetFromTheVerticalBorderInPercent);
         }

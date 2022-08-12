@@ -6,12 +6,12 @@ namespace Spawner
 {
 	public class UfoPlacer : IEnemyPlacer
 	{
-        private Collider2D _ufoCollider;
-        private float _offsetFromTheVerticalBorderInPercent;
+        private readonly BoxCollider2D _ufoCollider;
+        private readonly float _offsetFromTheVerticalBorderInPercent;
         private float _baseHorizontalPosition => ScreenBoundSize.HalfSize.x;
         private float _baseVerticalPosition => ScreenBoundSize.HalfSize.y;
         
-        public UfoPlacer(Collider2D ufoCollider, float offsetFromTheVerticalBorderInPercent)
+        public UfoPlacer(BoxCollider2D ufoCollider, float offsetFromTheVerticalBorderInPercent)
         {
             _offsetFromTheVerticalBorderInPercent = offsetFromTheVerticalBorderInPercent;
             _ufoCollider = ufoCollider;
@@ -29,25 +29,17 @@ namespace Spawner
 
         private float GetRandomVerticalPositionSpawn()
         {
-            float minPosition = GetOffsetPosition(_baseHorizontalPosition, GetOffsetFromTheVerticalBorder(), -1);
-            float maxPosition = GetOffsetPosition(_baseHorizontalPosition, GetOffsetFromTheVerticalBorder(), 1);
-
-            return Random.Range(minPosition, maxPosition);
+            return Random.Range(-GetOffsetFromTheVerticalBorder(), GetOffsetFromTheVerticalBorder());
         }
 
         private float GetRandomHorizontalPosition()
         {
-            return GetOffsetPosition(_baseVerticalPosition, _ufoCollider.bounds.size.x, Mathf.Sign(Random.Range(-1, 1)));
+            return Mathf.Sign(Random.Range(-1, 1)) * (_baseHorizontalPosition + _ufoCollider.size.x);
         }
-
-        private float GetOffsetPosition(float position, float offset, float sign)
-        {
-            return position + sign * offset;
-        }
-
+        
         private float GetOffsetFromTheVerticalBorder()
         {
-            return (ScreenBoundSize.HalfSize.y / 100f) * _offsetFromTheVerticalBorderInPercent;
+            return _baseVerticalPosition - (_baseVerticalPosition/ 100f) * _offsetFromTheVerticalBorderInPercent;
         }
     }
 }

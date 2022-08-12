@@ -10,9 +10,9 @@ namespace Spawner
     {
         [SerializeField] private int _startAmount;
         [SerializeField] private int _asteroidPartCount;
-        [SerializeField] private Collider2D _asteroidCollider;
         [SerializeField] private float _yawAngle;
-        [SerializeField] private List<Asteroid> _activeAsteroids = new List<Asteroid>();
+        
+        private List<Asteroid> _activeAsteroids = new List<Asteroid>();
         
         public void OnStartGame()
         {
@@ -52,7 +52,7 @@ namespace Spawner
 
         private void Spawn()
         {
-            CreateAsteroids(EnemyType.LargeAsteroid, EnemyPlacer.CreateAsteroidPlacer(_asteroidCollider), _startAmount);
+            CreateAsteroids(EnemyType.LargeAsteroid, EnemyPlacer.CreateAsteroidPlacer(EnemyCollider), _startAmount);
         }
 
         private void CreateAsteroids(EnemyType asteroidType, IEnemyPlacer enemyPlacer, int count)

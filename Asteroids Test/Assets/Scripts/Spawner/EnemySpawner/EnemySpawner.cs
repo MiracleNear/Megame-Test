@@ -6,6 +6,8 @@ namespace Spawner
 {
     public abstract class EnemySpawner<T> : MonoBehaviour where T : Enemy
     {
+        [SerializeField] protected BoxCollider2D EnemyCollider;
+        
         [SerializeField] private EnemyFactory<T> _enemyFactory;
         
         private void OnEnable()
@@ -17,8 +19,7 @@ namespace Spawner
         {
             UnSubscribe();
         }
-        
-        
+
         protected virtual void SubScribe()
         {
             _enemyFactory.Reclaimed += OnReclaimed;
@@ -33,7 +34,9 @@ namespace Spawner
 
         protected T Create(EnemyType enemyType, IEnemyPlacer enemyPlacer)
         {
-            T enemy = _enemyFactory.Get(enemyType, enemyPlacer.GetPosition(), enemyPlacer.GetDirectionFrom(enemyPlacer.GetPosition()));
+            Vector2 position = enemyPlacer.GetPosition();
+            
+            T enemy = _enemyFactory.Get(enemyType, position, enemyPlacer.GetDirectionFrom(position));
             
             return enemy;
         }

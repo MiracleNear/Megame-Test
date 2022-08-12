@@ -11,13 +11,13 @@ namespace Spawner
     {
         [SerializeField] private float _minAppearanceTime, _maxAppearanceTime, _offsetFromTheVerticalBorderInPercent;
         [SerializeField] private PlayerSpawner _playerSpawner;
-        [SerializeField] private Collider2D _ufoCollider;
 
         private Ufo _activeUfo;
         private Player _target;
         private Coroutine _spawnWithDelay;
         private bool _isPaused => PauseManager.GetInstance().IsPaused;
-        
+        private bool _isTargetNotNull => _target != null;
+
         protected override void SubScribe()
         {
             _playerSpawner.Spawned += OnSpawned;
@@ -34,22 +34,19 @@ namespace Spawner
         
         protected override void OnReclaimed(Ufo enemy)
         {
-            if (_target != null)
-            {
-                StartSpawn();
-            }
+            Spawn();
         }
         
         private void OnSpawned(Player player)
         {
             player.Died += OnDiedPlayer;
             _target = player;
-            StartSpawn();
+            Spawn();
         }
 
         private void OnDiedPlayer()
         {
-            if (_activeUfo != null)
+            if (_activeUfo)
             {
                 _activeUfo.Kill();
             }
@@ -57,13 +54,15 @@ namespace Spawner
             StopCoroutine(_spawnWithDelay);
         }
 
-        private void StartSpawn()
+        private void Spawn()
         {
             _spawnWithDelay = StartCoroutine(SpawnWithDelay());
         }
         
         private IEnumerator SpawnWithDelay()
         {
+            yield return new WaitUntil(() => _isTargetNotNull);
+            
             float duration = 0f;
             
             float delay = Random.Range(_minAppearanceTime, _maxAppearanceTime);
@@ -78,7 +77,7 @@ namespace Spawner
                 yield return null;
             }
 
-            _activeUfo = Create(EnemyType.Ufo, new UfoPlacer(_ufoCollider, _offsetFromTheVerticalBorderInPercent));
+            _activeUfo = Create(EnemyType.Ufo, EnemyPlacer.CreateUfoPlacer(EnemyCollider, _offsetFromTheVerticalBorderInPercent));
             _activeUfo.Init(_target.transform);
         }
     }

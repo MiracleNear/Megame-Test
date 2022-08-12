@@ -940,10 +940,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aab8da8511c9450e90bdb5dd571dd1a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyCollider: {fileID: -2764832611452911436, guid: 0b1e255093cf46b4e86884fe601f76de, type: 3}
   _enemyFactory: {fileID: 355272752}
   _startAmount: 2
   _asteroidPartCount: 2
-  _asteroidCollider: {fileID: -2764832611452911436, guid: 0b1e255093cf46b4e86884fe601f76de, type: 3}
   _yawAngle: 45
   _activeAsteroids: []
 --- !u!1 &539157359
@@ -1179,6 +1179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8836da41354b42f683789965501f1cc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EnemyCollider: {fileID: 5067477251684693352, guid: 9523583d658be0d429661b0cba680707, type: 3}
   _enemyFactory: {fileID: 475290439}
   _minAppearanceTime: 5
   _maxAppearanceTime: 10
