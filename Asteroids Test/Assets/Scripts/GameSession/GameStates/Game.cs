@@ -67,8 +67,6 @@ namespace GameSession
         private void OnGameEnded()
         {
             EventBus.Send<IGameOverListener>(listener => listener.OnGameOver());
-            
-            _selectorInput.ShowInput();
         }
     }
 }

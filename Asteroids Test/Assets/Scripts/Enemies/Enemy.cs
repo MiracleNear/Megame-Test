@@ -1,6 +1,4 @@
-﻿using System;
-using CollisionInterface;
-using DefaultNamespace.Audio;
+﻿using DefaultNamespace.Audio;
 using Detectors;
 using Factories;
 using GameSession;
@@ -10,17 +8,20 @@ using Random = UnityEngine.Random;
 namespace Enemies
 {
     [RequireComponent(typeof(GameZoneOutBoundsDetector))]
-    public abstract class Enemy : MonoBehaviour, IPlayerBulletCollisionHandler
+    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(BoxCollider2D))]
+    public abstract class Enemy : MonoBehaviour
     {
         public IFactoryGameElements FactoryGameElements;
         public Vector3 Direction { get; set; }
+        public int Points { get; private set; }
 
         [SerializeField] private ExplosionSFX _explosionSfx;
+        [SerializeField] private SpriteRenderer _spriteRenderer;
 
         private bool _isPaused => PauseManager.GetInstance().IsPaused;
         private float _speed;
         private AudioClip _deathSound;
-        private int _points;
         
         private void Update()
         {
@@ -30,20 +31,15 @@ namespace Enemies
             Shot();
         }
 
-        public void Init(EnemyConfig enemyConfig)
+        protected void Init(EnemyConfig enemyConfig, Sprite sprite)
         {
+            _spriteRenderer.sprite = sprite;
             _speed = Random.Range(enemyConfig.MinSpeed, enemyConfig.MaxSpeed);
             _deathSound = enemyConfig.DeathSound;
-            transform.localScale = enemyConfig.Scale;
-            _points = enemyConfig.Points;
+            Points = enemyConfig.Points;
         }
 
-        public virtual void OnCollisionPlayerBullet(Action<int> action)
-        {
-            action.Invoke(_points);
-            DestroySelf();
-        }
-        
+        protected abstract void OnCollisionEnter2D(Collision2D other);
 
         protected void DestroySelf()
 		{

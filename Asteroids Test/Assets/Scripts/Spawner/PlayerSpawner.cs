@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using GameSession;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -20,9 +19,9 @@ namespace Spawner
         }
 
         public void SpawnPlayerWithDelay()
-		{
+        {
             StartCoroutine(SpawnWithDelay());
-		}
+        }
 
         private IEnumerator SpawnWithDelay()
         {

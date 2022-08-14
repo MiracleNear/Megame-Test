@@ -19,8 +19,6 @@ namespace Factories
 
 	    public T Get(EnemyType enemyType, Vector2 position, Vector2 direction)
 	    {
-		    EnemyConfig enemyConfig = GetConfigByType(enemyType);
-
 		    T enemy = GetInstance(enemyType);
 
 		    enemy.FactoryGameElements = this;
@@ -28,8 +26,6 @@ namespace Factories
 		    enemy.transform.position = position;
 		    enemy.Direction = direction;
 		    
-		    enemy.Init(enemyConfig);
-
 		    return enemy;
 	    }
 
@@ -39,7 +35,5 @@ namespace Factories
 	    }
 
 	    protected abstract T GetInstance(EnemyType enemyType);
-
-	    protected abstract EnemyConfig GetConfigByType(EnemyType enemyType);
     }
 }

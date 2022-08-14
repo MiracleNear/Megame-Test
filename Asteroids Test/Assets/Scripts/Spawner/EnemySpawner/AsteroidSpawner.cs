@@ -10,8 +10,7 @@ namespace Spawner
     {
         [SerializeField] private int _startAmount;
         [SerializeField] private int _asteroidPartCount;
-        [SerializeField] private float _yawAngle;
-        
+
         private List<Asteroid> _activeAsteroids = new List<Asteroid>();
         
         public void OnStartGame()
@@ -19,12 +18,9 @@ namespace Spawner
             Spawn();
         }
 
-        public void SpawnPartAsteroidsFor(Asteroid asteroid)
+        public void SpawnPartAsteroids(IEnemyPlacer enemyPlacer, EnemyType partAsteroid)
         {
-            if (asteroid.TryBreakAsteroid(out EnemyType nextPartAsteroid))
-            {
-                CreateAsteroids(nextPartAsteroid, new AsteroidPartPlacer(asteroid, _yawAngle), _asteroidPartCount);
-            }
+           CreateAsteroids(partAsteroid, enemyPlacer, _asteroidPartCount);
         }
 
         protected override void SubScribe()

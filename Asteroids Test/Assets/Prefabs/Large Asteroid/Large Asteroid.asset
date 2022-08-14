@@ -9,11 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4b2387557dd4175995221c7081bd9b3, type: 3}
+  m_Script: {fileID: 11500000, guid: abf06655d1ad47dc9e3072e2267799ae, type: 3}
   m_Name: Large Asteroid
   m_EditorClassIdentifier: 
   Points: 20
-  Scale: {x: 1, y: 1}
-  MinSpeed: 1
-  MaxSpeed: 2
+  MinSpeed: 0.5
+  MaxSpeed: 1.75
   DeathSound: {fileID: 8300000, guid: f0c4e7708e5cc2e4da3be24711c67c6c, type: 3}
+  AsteroidSettings:
+  - _spriteRenderer: {fileID: 7469612729251349929, guid: a835a308b20ada64fbfd5b186d28f21d, type: 3}
+    BoxCollider2D: {fileID: 4954797386873792519, guid: a835a308b20ada64fbfd5b186d28f21d, type: 3}
+  - _spriteRenderer: {fileID: -1112282153281453390, guid: aeea37398486ee94489da577f58dcda8, type: 3}
+    BoxCollider2D: {fileID: -3171662730356510948, guid: aeea37398486ee94489da577f58dcda8, type: 3}
+  - _spriteRenderer: {fileID: 1115542671365434431, guid: 46ef11eabd0fd10418b0a823e81529b1, type: 3}
+    BoxCollider2D: {fileID: 3175223474916475281, guid: 46ef11eabd0fd10418b0a823e81529b1, type: 3}
+  - _spriteRenderer: {fileID: -1728529279556945954, guid: f69ec32868757234ab778ec0d111148a, type: 3}
+    BoxCollider2D: {fileID: 1114223259444404499, guid: f69ec32868757234ab778ec0d111148a, type: 3}
+  Scale: {x: 1, y: 1}

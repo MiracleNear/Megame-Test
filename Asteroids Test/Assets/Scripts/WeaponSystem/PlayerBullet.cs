@@ -1,5 +1,5 @@
 ﻿using System;
-using CollisionInterface;
+using Enemies;
 using UnityEngine;
 
 namespace WeaponSystem
@@ -13,16 +13,14 @@ namespace WeaponSystem
             _enemyHit = EnemyHit;
         }
 
-        protected override bool TryCollisionWith(GameObject gameObject)
-        {
-            if (gameObject.TryGetComponent(out IPlayerBulletCollisionHandler bulletCollisionHandler))
-            {
-                bulletCollisionHandler.OnCollisionPlayerBullet(_enemyHit);
-                return true;
-            }
 
-            return false;
+        protected override void OnCollisionEnter2D(Collision2D other)
+        {
+            if (other.gameObject.TryGetComponent(out Enemy enemy))
+            {
+                _enemyHit?.Invoke(enemy.Points);
+                Destroy();
+            }
         }
-        
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System;
-using CollisionInterface;
 using DefaultNamespace.Audio;
+using Enemies;
 using UnityEngine;
 using WeaponSystem;
 
 [RequireComponent(typeof(PlayerWeapon))]
 [RequireComponent(typeof(Invulnerability))]
 [RequireComponent(typeof(AudioSource))]
-public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollisionHandler
+public class Player : MonoBehaviour
 {
     public event Action Died;
     
@@ -32,19 +32,7 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollis
     {
         _invulnerability.Activate();
     }
-
-
-    public void OnCollisionAsteroid()
-    {
-        Destroy();
-    }
-
-    public void OnCollisionUfoBullet()
-    {
-        Destroy();
-    }
-
-
+    
     public void Accelerate()
     {
         _acceleration = _acceleration + transform.up * (_speedPerSecond * Time.deltaTime);
@@ -89,10 +77,17 @@ public class Player : MonoBehaviour, IAsteroidCollisionHandler, IUfoBulletCollis
         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, _rotatePerSecond * Time.deltaTime);
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.TryGetComponent(out UfoBullet ufoBullet) ||
+            other.gameObject.TryGetComponent(out Asteroid asteroid))
+        {
+            Destroy();
+        }
+    }
+
     private void Destroy()
     {
-        if(_invulnerability.IsActivated) return;
-
         Instantiate(_explosionSfx).Init(_soundDeath);
         
         Died?.Invoke();

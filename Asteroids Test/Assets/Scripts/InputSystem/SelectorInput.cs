@@ -7,19 +7,25 @@ namespace DefaultNamespace.GameSession
 {
     public class SelectorInput : MonoBehaviour
     {
-        public event Action<string> SendInputName;
         public InputType SelectedInputType => _selectedInput.InputType;
         
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private InputType _defaultInput;
         [SerializeField] private InputFactory _inputFactory;
-        
+
         private InputType[] _availableInputs;
         private IInput _selectedInput;
-
+        private Action<string> _displayInput;
+        public void Init(Action<string> displayInput)
+        {
+            _displayInput = displayInput;
+            ShowInput();
+        }
+        
         private void Awake()
         {
             _availableInputs = _inputFactory.GetTypesInput();
+            
             SetInput(_defaultInput);
         }
         
@@ -41,9 +47,9 @@ namespace DefaultNamespace.GameSession
             ShowInput();
         }
 
-        public void ShowInput()
+        private void ShowInput()
         {
-            SendInputName?.Invoke(_selectedInput.Name);
+            _displayInput?.Invoke(_selectedInput.Name);
         }
     }
 }

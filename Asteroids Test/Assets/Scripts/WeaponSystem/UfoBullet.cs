@@ -1,20 +1,17 @@
-﻿using CollisionInterface;
+﻿using Enemies;
 using UnityEngine;
 
 namespace WeaponSystem
 {
     public class UfoBullet : Bullet
     {
-        protected override bool TryCollisionWith(GameObject gameObject)
+        protected override void OnCollisionEnter2D(Collision2D other)
         {
-            if (gameObject.TryGetComponent(out IUfoBulletCollisionHandler bulletCollisionHandler))
+            if (other.gameObject.TryGetComponent(out Player player) ||
+                other.gameObject.TryGetComponent(out Asteroid asteroid))
             {
-                bulletCollisionHandler.OnCollisionUfoBullet();
-                return true;
+                Destroy();
             }
-
-            return false;
         }
-        
     }
 }

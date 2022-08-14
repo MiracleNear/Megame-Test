@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4b2387557dd4175995221c7081bd9b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 68fd773157c14a70b414875a0c8755c7, type: 3}
   m_Name: Ufo Config
   m_EditorClassIdentifier: 
   Points: 200
-  Scale: {x: 1, y: 1}
-  MinSpeed: 4
-  MaxSpeed: 8
+  MinSpeed: 2.75
+  MaxSpeed: 5.25
   DeathSound: {fileID: 8300000, guid: d0509bd5dfb5dc344ad2be3da8c4ffff, type: 3}
+  Sprites:
+  - {fileID: 21300000, guid: 9349cb74d54354f4bafa71ca77facae5, type: 3}
+  - {fileID: 21300000, guid: 70a8d49bfa0691545abfef538696a89d, type: 3}
+  - {fileID: 21300000, guid: 563658946f33e7c47a7c7eb27d203a8c, type: 3}
+  - {fileID: 21300000, guid: 670dcef512b4c3d498bdffc9893674e3, type: 3}

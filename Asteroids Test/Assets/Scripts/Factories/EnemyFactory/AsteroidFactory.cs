@@ -9,8 +9,9 @@ namespace Factories
     [RequireComponent(typeof(AsteroidPool))]
     public class AsteroidFactory : EnemyFactory<Asteroid>
     {
-        [SerializeField] private EnemyConfig _asteroidLargeConfig, _asteroidMediumConfig, _asteroidSmallConfig;
+        [SerializeField] private AsteroidConfig _asteroidLargeConfig, _asteroidMediumConfig, _asteroidSmallConfig;
         [SerializeField] private AsteroidSpawner _asteroidSpawner;
+        [SerializeField] private float _yawAngle;
 
         private IObjectPool<Asteroid> _asteroidsPool;
         private void Awake()
@@ -29,13 +30,15 @@ namespace Factories
         protected override Asteroid GetInstance(EnemyType enemyType)
         { 
             Asteroid asteroid = _asteroidsPool.GetFreeElement();
+
+            AsteroidConfig asteroidConfig = GetConfigByType(enemyType);
             
-            asteroid.Init(_asteroidSpawner, AsteroidType.ConvertEnemyTypeToAsteroidType(enemyType));
+            asteroid.Init(asteroidConfig,AsteroidType.CreateAsteroidType(_asteroidSpawner, _yawAngle, enemyType));
 
             return asteroid;
         }
 
-        protected override EnemyConfig GetConfigByType(EnemyType enemyType)
+        private AsteroidConfig GetConfigByType(EnemyType enemyType)
         {
             switch(enemyType)
             {

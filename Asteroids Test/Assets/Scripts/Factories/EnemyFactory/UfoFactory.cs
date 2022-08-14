@@ -6,7 +6,7 @@ namespace Factories
 {
     public class UfoFactory : EnemyFactory<Ufo>
     {
-        [SerializeField] private EnemyConfig _ufoConfig;
+        [SerializeField] private UfoConfig _ufoConfig;
         [SerializeField] private Ufo _template;
 
         protected override void Reclaim(Ufo element)
@@ -18,10 +18,16 @@ namespace Factories
 
         protected override Ufo GetInstance(EnemyType enemyType)
         {
-            return Instantiate(_template);
+            UfoConfig ufoConfig = GetConfigByType(enemyType);
+            
+            Ufo ufo = Instantiate(_template);
+            
+            ufo.Init(ufoConfig);
+
+            return ufo;
         }
 
-        protected override EnemyConfig GetConfigByType(EnemyType enemyType)
+        private UfoConfig GetConfigByType(EnemyType enemyType)
         {
             switch (enemyType)
             {

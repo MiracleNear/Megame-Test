@@ -78,7 +78,7 @@ namespace Spawner
             }
 
             _activeUfo = Create(EnemyType.Ufo, EnemyPlacer.CreateUfoPlacer(EnemyCollider, _offsetFromTheVerticalBorderInPercent));
-            _activeUfo.Init(_target.transform);
+            _activeUfo.SetTarget(_target.transform);
         }
     }
 }

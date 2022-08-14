@@ -10,6 +10,9 @@ namespace Spawner
         private float _baseHorizontalPosition => ScreenBoundSize.HalfSize.x;
         private float _baseVerticalPosition => ScreenBoundSize.HalfSize.y;
 
+        private float _horizontalBoundaryPosition => _baseHorizontalPosition + _asteroidCollider.size.x;
+        private float _verticalBoundaryPosition => _baseVerticalPosition + _asteroidCollider.size.y;
+
         public AsteroidPlacer(BoxCollider2D asteroidCollider)
         {
             _asteroidCollider = asteroidCollider;
@@ -32,21 +35,19 @@ namespace Spawner
 
         private Vector2 GetRandomVerticalPosition()
         {
-            return new Vector2(GetRandomOffsetPosition(_baseHorizontalPosition, _asteroidCollider.size.x),
+            return new Vector2(GetRandomBorderPosition(_horizontalBoundaryPosition),
                 Random.Range(-_baseVerticalPosition, _baseVerticalPosition));
         }
         
         private Vector2 GetRandomHorizontalPosition()
         {
             return new Vector2(Random.Range(-_baseHorizontalPosition, _baseHorizontalPosition),
-                GetRandomOffsetPosition(_baseVerticalPosition, _asteroidCollider.size.y));
+                GetRandomBorderPosition(_verticalBoundaryPosition));
         }
         
-        private float GetRandomOffsetPosition(float position, float offset)
+        private float GetRandomBorderPosition(float position)
         {
-            float sign = Mathf.Sign(Random.Range(-1, 1));
-            
-            return sign * (position +  offset);
+            return Mathf.Sign(Random.Range(-1, 1)) * position;
         }
     }
 }

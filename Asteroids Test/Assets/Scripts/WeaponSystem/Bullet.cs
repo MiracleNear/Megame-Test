@@ -1,4 +1,6 @@
-﻿using DefaultNamespace;
+﻿using System;
+using DefaultNamespace;
+using Enemies;
 using Factories;
 using GameSession;
 using UnityEngine;
@@ -27,12 +29,19 @@ namespace WeaponSystem
         {
             _direction = direction;
             transform.position = position;
+            
+            transform.rotation = Quaternion.LookRotation(Vector3.forward, _direction);
         }
+
+        protected void Destroy()
+        {
+            _distanceTraveled = 0f;
+            
+            RecyclerFactoryGameElements.Recycle(this);
+        }
+
+        protected abstract void OnCollisionEnter2D(Collision2D other);
         
-
-        protected abstract bool TryCollisionWith(GameObject gameObject);
-
-
         private void Update()
         {
             if(_isPaused) return;
@@ -52,21 +61,6 @@ namespace WeaponSystem
 
             transform.position += _direction * deltaMove;
             _distanceTraveled += deltaMove;
-        }
-
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            if (TryCollisionWith(other.gameObject))
-            {
-                Destroy();
-            }
-        }
-
-        private void Destroy()
-        {
-            _distanceTraveled = 0f;
-            
-            RecyclerFactoryGameElements.Recycle(this);
         }
     }
 }

@@ -9,11 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4b2387557dd4175995221c7081bd9b3, type: 3}
+  m_Script: {fileID: 11500000, guid: abf06655d1ad47dc9e3072e2267799ae, type: 3}
   m_Name: Medium Asteroid
   m_EditorClassIdentifier: 
   Points: 50
-  Scale: {x: 0.75, y: 0.75}
-  MinSpeed: 3
-  MaxSpeed: 4
+  MinSpeed: 2
+  MaxSpeed: 4.35
   DeathSound: {fileID: 8300000, guid: 8ee5e9d6d77b7d849a0ab65264348172, type: 3}
+  AsteroidSettings:
+  - _spriteRenderer: {fileID: 7848885517287796820, guid: 0442fa3c0dfcd384ebc015c9e3920948, type: 3}
+    BoxCollider2D: {fileID: 5730631521451351546, guid: 0442fa3c0dfcd384ebc015c9e3920948, type: 3}
+  - _spriteRenderer: {fileID: 4535101070984469027, guid: 1652f8547cc4a994ebcb97691b66eddb, type: 3}
+    BoxCollider2D: {fileID: 2126955414777231245, guid: 1652f8547cc4a994ebcb97691b66eddb, type: 3}
+  Scale: {x: 1.5, y: 1.5}

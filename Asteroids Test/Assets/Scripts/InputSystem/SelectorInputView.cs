@@ -9,16 +9,11 @@ public class SelectorInputView : MonoBehaviour
 
     private void OnEnable()
     {
-        _selectorInput.SendInputName += Display;
-    }
-
-    private void OnDisable()
-    {
-        _selectorInput.SendInputName -= Display;
+        _selectorInput.Init(Display);
     }
     
     private void Display(string inputName)
     {
-        _selectedInput.text = inputName;
+        _selectedInput.text = "Control: " + inputName;
     }
 }

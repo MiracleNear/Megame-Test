@@ -8,17 +8,16 @@ namespace ObjectPools
          [SerializeField] private int _baseCapacity = 16;
          [SerializeField] private int _additionCapacity = 16;
          [SerializeField] private T _template;
-         
+
          private Stack<T> _pool;
-
-         private void Awake()
-         {
-             CreatePool(_baseCapacity);
-         }
-
+         
          public T GetFreeElement()
          {
-             if (_pool.Count == 0)
+             if (_pool == null)
+             {
+                 CreatePool(_baseCapacity);
+             }
+             else if (_pool.Count == 0)
              {
                  CreatePool(_additionCapacity);
              }
