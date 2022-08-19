@@ -13,7 +13,7 @@ namespace GameSession
 
         private void OnDestroy()
         {
-            EventBus.Subscribe<IPauseButtonClickListener>(this);
+            EventBus.UnSubscribe<IPauseButtonClickListener>(this);
 
             PauseManager.GetInstance().Dispose();
         }

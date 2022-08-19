@@ -5,6 +5,6 @@ namespace GameSession
 {
     public class Session : MonoBehaviour
     {
-        public InputType SelectedInput;
+        public InputType SelectedInput { get; set; }
     }
 }

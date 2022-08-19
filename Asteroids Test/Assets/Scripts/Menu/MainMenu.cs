@@ -68,7 +68,6 @@ namespace Menu
                     _resumeGameButtonView.color = _resumeButtonColorOnPause;
                 }
             }
-          
         }
 
         private void OnClickResumeButton()

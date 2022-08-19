@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shotPoint: {fileID: 1469495958820813704}
-  _shotSound: {fileID: 8300000, guid: 712b927c870993145871764925c0158d, type: 3}
+  _shotSound: {fileID: 8300000, guid: 5144aaf2d52f40945a56cf96169672d4, type: 3}
   _numberOfBulletsPerSecond: 3
 --- !u!114 &1469495958565677294
 MonoBehaviour:

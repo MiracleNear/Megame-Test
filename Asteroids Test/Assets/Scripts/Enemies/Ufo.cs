@@ -1,4 +1,6 @@
-﻿using Factories;
+﻿using System.ComponentModel;
+using System.ComponentModel.Design;
+using Factories;
 using UnityEngine;
 using WeaponSystem;
 
@@ -17,7 +19,7 @@ namespace Enemies
         public void Init(UfoConfig enemyConfig)
         {
             Sprite sprite = enemyConfig.Sprites[Random.Range(0, enemyConfig.Sprites.Length)];
-            
+
             Init(enemyConfig, sprite);
         }
         

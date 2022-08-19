@@ -45,6 +45,7 @@ namespace GameSession
             }
             else
             {
+                IsActivity = false;
                 GameEnded?.Invoke();
             }
         }

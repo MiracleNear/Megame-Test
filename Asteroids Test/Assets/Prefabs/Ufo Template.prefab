@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _shotPoint: {fileID: 4561320161702161076}
-  _shotSound: {fileID: 8300000, guid: 712b927c870993145871764925c0158d, type: 3}
+  _shotSound: {fileID: 8300000, guid: 0a5c5642a21a92a4f9835e0a8434b923, type: 3}
   _minimumRechargeTime: 2
   _maximumRechargeTime: 5
 --- !u!50 &8178327255989424428

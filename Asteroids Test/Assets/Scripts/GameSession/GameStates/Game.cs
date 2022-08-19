@@ -8,44 +8,41 @@ namespace GameSession
     {
         [SerializeField] private GameCycle _gameCycle;
         [SerializeField] private SelectorInput _selectorInput;
+        [SerializeField] private Session _session;
 
-        private Session _session;
-
+        private Session _current;
+        
         private void Start()
         {
-            _session = FindObjectOfType<Session>();
+            _current = FindObjectOfType<Session>();
 
-            if (_session == null)
+            if (_current == null)
             {
-                _session = new GameObject("Session Info").AddComponent<Session>();
-
-                DontDestroyOnLoad(_session);
+                _current = Instantiate(_session);
+                
+                DontDestroyOnLoad(_current);
             }
             else
             {
-                _selectorInput.SetInput(_session.SelectedInput);
-                
-                StartGame();
+                _selectorInput.SetInput(_current.SelectedInput);
+                StartNewGame();
             }
         }
-
+        
         private void OnEnable()
         {
             _gameCycle.GameEnded += OnGameEnded;
         }
-
 
         private void OnDisable()
         {
             _gameCycle.GameEnded -= OnGameEnded;
         }
 
-        public void StartGame()
+        public void StartNewGame()
         {
             if (_gameCycle.IsActivity)
             {
-                _session.SelectedInput = _selectorInput.SelectedInputType;
-                
                 ReloadGame();
             }
             else
@@ -54,16 +51,18 @@ namespace GameSession
             }
         }
 
+        public void ReloadGame()
+        {
+            _current.SelectedInput = _selectorInput.SelectedInputType;
+            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
         public void ExitGame()
         {
             Application.Quit();
         }
 
-        private void ReloadGame()
-        {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
-        
         private void OnGameEnded()
         {
             EventBus.Send<IGameOverListener>(listener => listener.OnGameOver());

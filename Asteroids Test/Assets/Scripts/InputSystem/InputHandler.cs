@@ -52,7 +52,7 @@ public class InputHandler : MonoBehaviour, IGameStartListener
     {
         if(!_isCanHandleInput) return;
         
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Backspace))
         {
             EventBus.Send<IPauseButtonClickListener>(listener => listener.OnClickPauseButton());
         }
