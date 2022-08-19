@@ -15,9 +15,9 @@
 * Настройка врагов, с возможностью указать им разную скорость, выбрать подходящий спрайт и настроить кол-во получаемых очков за их убийство
 # Коротка демонстранция проекта
 
-   ![menu](https://user-images.githubusercontent.com/101981875/185640414-11f6343b-7a33-4d46-83b8-7c162e2213ff.gif)
+![menu](https://user-images.githubusercontent.com/101981875/185640414-11f6343b-7a33-4d46-83b8-7c162e2213ff.gif)
 
-   ![game play](https://user-images.githubusercontent.com/101981875/185640418-ee895e13-53ac-44a5-bb15-597403588047.gif)
+![game play](https://user-images.githubusercontent.com/101981875/185640418-ee895e13-53ac-44a5-bb15-597403588047.gif)<-
 
 # Ccылка на itch.io, чтобы поиграть в игру
 https://alwaysnearby.itch.io/asteroids
