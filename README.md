@@ -14,8 +14,10 @@
 * Система паузы, с возможностью изменением игрового управления и рестартом игры
 * Настройка врагов, с возможностью указать им разную скорость, выбрать подходящий спрайт и настроить кол-во получаемых очков за их убийство
 # Коротка демонстранция проекта
-![movie_004](https://user-images.githubusercontent.com/101981875/185637974-98f9a1dd-4722-4ce1-9e79-fd1459497860.gif)
-![movie_005](https://user-images.githubusercontent.com/101981875/185637986-d9f0f77b-4f19-4eff-94f3-f137d567fa4a.gif)
+
+![menu](https://user-images.githubusercontent.com/101981875/185640414-11f6343b-7a33-4d46-83b8-7c162e2213ff.gif)
+
+![game play](https://user-images.githubusercontent.com/101981875/185640418-ee895e13-53ac-44a5-bb15-597403588047.gif)
 
 # Ccылка на itch.io, чтобы поиграть в игру
 https://alwaysnearby.itch.io/asteroids
